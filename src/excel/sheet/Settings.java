@@ -2,14 +2,16 @@ package excel.sheet;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.joda.time.LocalDate;
 
 import user.User;
-
 import enums.CalorieSplit;
 import enums.CarbFatSplit;
 import enums.DayType;
@@ -22,34 +24,32 @@ import excel.Excel;
 
 public class Settings {
 	
+	public static final Map<String, Integer> COLS = new HashMap<String, Integer>();
+	static {
+		int i = 0;
+		COLS.put("DOW", i++);
+		COLS.put("Date", i++);
+		COLS.put("Weight", i++);
+		COLS.put("EWMA5", i++);
+		COLS.put("EWMA7", i++);
+		COLS.put("Smoothed", i++);
+		COLS.put("Forecast", i++);
+		COLS.put("Residual", i++);
+		COLS.put("Lost/wk", i++);
+		COLS.put("Trend", i++);
+		COLS.put("Slope", i++);
+		COLS.put("C/F Split", i++);
+		COLS.put("Change", i++);
+		COLS.put("BMR", i++);
+		COLS.put("TDEE", i++);
+		COLS.put("BMR?", i++);
+		COLS.put("Calories", i++);
+		COLS.put("P*", i++);
+		COLS.put("Protein", i++);
+		COLS.put("Assumed Constants", ++i);	// inc before
+	}
 	
-	
-	public static final int DATE = 0;
-	public static final int WEIGHT = DATE + 1;
-	public static final int DAY_TYPE = WEIGHT + 1;
-	public static final int CALORIE_SPLIT = DAY_TYPE + 1;
-	public static final int CARB_FAT_SPLIT = CALORIE_SPLIT + 1;
-	public static final int HEIGHT = CARB_FAT_SPLIT + 2;
-	public static final int AGE = HEIGHT + 1;
-	public static final int UNIT_SYSTEM = AGE + 1;
-	public static final int ACTIVITY_MULTIPLIER = UNIT_SYSTEM + 1;
-	public static final int FORMULA = ACTIVITY_MULTIPLIER + 1;
-	public static final int SEX = FORMULA + 1;
-	
-	
-	public static final char DATE_LETTER = 'A';
-	public static final char WEIGHT_LETTER = DATE_LETTER + WEIGHT;
-	public static final char DAY_TYPE_LETTER = DATE_LETTER + DAY_TYPE;
-	public static final char CALORIE_SPLIT_LETTER = DATE_LETTER + CALORIE_SPLIT;
-	public static final char CARB_FAT_SPLIT_LETTER = DATE_LETTER + CARB_FAT_SPLIT;
-	public static final char HEIGHT_LETTER = DATE_LETTER + HEIGHT;
-	public static final char AGE_LETTER = DATE_LETTER + AGE;
-	public static final char UNIT_SYSTEM_LETTER = DATE_LETTER + UNIT_SYSTEM;
-	public static final char ACTIVITY_MULTIPLIER_LETTER = DATE_LETTER + ACTIVITY_MULTIPLIER;
-	public static final char FORMULA_LETTER = DATE_LETTER + ACTIVITY_MULTIPLIER;
-	public static final char SEX_LETTER = DATE_LETTER + FORMULA;
-
-	public static final int DEFAULT_NUM_ROWS = 31; // it's really 31 - 1 rows.
+	public static final int DEFAULT_NUM_ROWS = 12*7; // 12 weeks
 	public static final double DEFAULT_WEIGHT = 0.0;
 	public static final double DEFAULT_HEIGHT = 71.0;
 	public static final int DEFAULT_AGE = 22;
@@ -66,17 +66,41 @@ public class Settings {
 		Sheet s = this.wb.createSheet("Settings");
 		Row titles = s.createRow(0);
 		
-		CellBuilder.makeTitleCell(wb, titles, DATE, "Date: ");
-		CellBuilder.makeTitleCell(wb, titles, WEIGHT, "Weight: ");
-		CellBuilder.makeTitleCell(wb, titles, DAY_TYPE, "Day Type: ");
-		CellBuilder.makeTitleCell(wb, titles, CALORIE_SPLIT, "Rest / Workout Calorie Split: ");
-		CellBuilder.makeTitleCell(wb, titles, CARB_FAT_SPLIT, "Carbs / Fat Split (Rest - Workout): ");
-		CellBuilder.makeTitleCell(wb, titles, HEIGHT, "Height: ");
-		CellBuilder.makeTitleCell(wb, titles, AGE, "Age: ");
-		CellBuilder.makeTitleCell(wb, titles, UNIT_SYSTEM, "Units: ");
-		CellBuilder.makeTitleCell(wb, titles, ACTIVITY_MULTIPLIER, "Activity Multiplier: ");
-		CellBuilder.makeTitleCell(wb, titles, FORMULA, "Forumla: ");
-		CellBuilder.makeTitleCell(wb, titles, SEX, "Sex: ");
+		createTitleCell(titles, "DOW");
+		createTitleCell(titles, "DOW");
+		createTitleCell(titles, "Date");
+		createTitleCell(titles, "Weight");
+		createTitleCell(titles, "EWMA5");
+		createTitleCell(titles, "EWMA7");
+		createTitleCell(titles, "Smoothed");
+		createTitleCell(titles, "Forecast");
+		createTitleCell(titles, "Residual");
+		createTitleCell(titles, "Lost/wk");
+		createTitleCell(titles, "Trend");
+		createTitleCell(titles, "Slope");
+		createTitleCell(titles, "C/F Split");
+		createTitleCell(titles, "Change");
+		createTitleCell(titles, "BMR");
+		createTitleCell(titles, "TDEE");
+		createTitleCell(titles, "BMR?");
+		createTitleCell(titles, "Calories");
+		createTitleCell(titles, "P*");
+		createTitleCell(titles, "Protein");
+		createTitleCell(titles, "Assumed Constants");
+		
+		
+		LocalDate d = new LocalDate();
+		for(int i = Excel.DATA_START; i <= DEFAULT_NUM_ROWS; i++) {
+			Row r = s.createRow(i);
+			makeDOWCell(r, d);
+			makeDateCell(r, d);
+			d = d.plusDays(1);
+			makeWeightCell(r);
+			
+		}
+		
+		/*
+		
 		
 		Calendar c = Calendar.getInstance();
 		Date d = new Date();
@@ -108,10 +132,12 @@ public class Settings {
 		Excel.createDropDownBox(s, UnitSystem.UNIT_SYSTEM, UNIT_SYSTEM);
 		Excel.createDropDownBox(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, ACTIVITY_MULTIPLIER);
 		Excel.createDropDownBox(s, Sex.SEX, SEX);
+		*/
 		
 		Excel.autosizeCols(s);
 		return s;
 	}
+	
 	
 	public static User extractSettings(Workbook wb, int row) {
 		Sheet s = wb.getSheet("Settings");
@@ -119,6 +145,7 @@ public class Settings {
 		Row constantsRow = s.getRow(Excel.DATA_START);
 		row = row / 6 + 1;
 		
+		/*
 		Row updatingRow = s.getRow(row);
 		double weight = updatingRow.getCell(WEIGHT).getNumericCellValue();
 		double height = constantsRow.getCell(HEIGHT).getNumericCellValue();
@@ -130,34 +157,44 @@ public class Settings {
 		CarbFatSplit carbFatSplit = CarbFatSplit.parseRichTextString(updatingRow.getCell(CARB_FAT_SPLIT).getRichStringCellValue());
 		Formula f = Formula.parseRichTextString(constantsRow.getCell(FORMULA).getRichStringCellValue());
 		Sex sex = Sex.parseRichTextString(constantsRow.getCell(SEX).getRichStringCellValue());
-		return new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
+		*/
+		return null; //new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
 	}
-	
-	
-	/**
-	 * Creates a Cell in the weight column with the default weight.
-	 * 
-	 * @param wb	The workbook being used.
-	 * @param r		The row to add the weight cell to.
-	 * @return		A Cell formatted to be the weight of the user with the default decimal precision.
-	 */
-	public static Cell makeWeightCell(Workbook wb, Row r) {
-		return CellBuilder.makeNumberCell(wb, r, WEIGHT, DEFAULT_WEIGHT);
-	}
-	
 
-	/**
-	 * Creates a Cell in the weight column with the specified weight.
-	 * 
-	 * @param wb		The workbook being used.
-	 * @param r			The row to add the weight cell to.
-	 * @param weight	The weight to be the cell value.
-	 * @return			A Cell formatted to be the weight of the user with the default decimal precision.
-	 */
-	public static Cell makeWeightCell(Workbook wb, Row r, double weight) {
-		return CellBuilder.makeNumberCell(wb, r, WEIGHT, weight);
+	public Cell createTitleCell(Row r, String n) {
+		return CellBuilder.makeTitleCell(this.wb, r, COLS.get(n), n);
 	}
 	
+	public Cell makeDOWCell(Row r, LocalDate d) {
+		String formula = "TEXT(" + dateCol() + (r.getRowNum()+1) + ", \"ddd\")";
+		return CellBuilder.makeFormulaCell(r, COLS.get("DOW"), formula);
+	}
+	
+	
+	public Cell makeDateCell(Row r) { return makeDateCell(r, new LocalDate()); }
+	public Cell makeDateCell(Row r, LocalDate d) { return makeDateCell(r, COLS.get("Date"), d); }
+	public Cell makeDateCell(Row r, int index, LocalDate d) {
+		Cell c = CellBuilder.makeCell(r, index, d.toString());
+		c.setCellStyle(Excel.dateStyle(this.wb));
+		return c;
+	}
+	
+	public Cell makeWeightCell(Row r) { return makeWeightCell(r, DEFAULT_WEIGHT); }
+	public Cell makeWeightCell(Row r, double weight) {
+		return CellBuilder.makeNumberCell(this.wb, r, COLS.get("Weight"), weight);
+	}
+	
+	
+	
+	public static String dowCol() {
+		return "$" + Excel.rowToLetter(COLS.get("DOW"));
+	}
+	
+	public static String dateCol() {
+		return "$" + Excel.rowToLetter(COLS.get("Date"));
+	}
+	
+	/*
 	public static Cell makeDayTypeCell(Row r) { 
 		return CellBuilder.makeCell(r, DAY_TYPE, DayType.WORKOUT.toString());
 	}
@@ -187,12 +224,6 @@ public class Settings {
 		return CellBuilder.makeCell(r, SEX, Sex.MALE.getSexName());
 	}
 	
-
-	public static Cell makeDateCell(Workbook wb, Row r, int index, Date d) {
-		Cell c = CellBuilder.makeCell(r, index, d);
-		c.setCellStyle(Excel.dateStyle(wb));
-		return c;
-	}
 	
 	public static String dateColumn() {
 		return "$" + DATE_LETTER;
@@ -233,4 +264,5 @@ public class Settings {
 	public static String activityMultiplierColumn() {
 		return "$" + ACTIVITY_MULTIPLIER_LETTER;
 	}
+	*/
 }

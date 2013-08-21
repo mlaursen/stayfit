@@ -28,9 +28,9 @@ import enums.DayType;
 
 public class Excel {
 
-	public static final String DEFAULT_PATH = System.getProperty("user.home") + "\\Documents\\";
+	public static final String DEFAULT_PATH = System.getProperty("user.home") + "\\Documents";
 	public static final String XSSL = ".xlsx";
-	public static final String DEFAULT_WORKBOOK_NAME = "Nutrition Tracker" + XSSL;
+	public static final String DEFAULT_WORKBOOK_NAME = "\\Nutrition Tracker" + XSSL;
 	public static final String DATE_FORMAT = "dddd, mmmm dd, yyyy";
 	public static final String NUMBER_FORMAT = "0.00";
 	public static final int DATA_START = 1;
@@ -49,6 +49,11 @@ public class Excel {
 		return cs;
 	}
 	
+	/**
+	 * Creates a cell style with the default bold font size and bolds the font.
+	 * @param wb	The workbook to add the bold style to
+	 * @return		The bold cell style.
+	 */
 	public static CellStyle boldCell(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
 		Font f = wb.createFont();
@@ -75,16 +80,18 @@ public class Excel {
 	}
 	
 	public static void writeToExcel(Workbook wb) { writeToExcel(wb, DEFAULT_PATH, DEFAULT_WORKBOOK_NAME); }
-	public static void writeToExcel(Workbook wb, String path, String fName) {
+	public static void writeToExcel(Workbook wb, String path, String fName) { writeToExcel(wb, path + fName); }
+	public static void writeToExcel(Workbook wb, String completeName) {
 		try {
-			OutputStream fOut = new FileOutputStream(path + fName);
-			wb.write(fOut);
-			fOut.close();
+			OutputStream o = new FileOutputStream(completeName);
+			wb.write(o);
+			o.close();
 		}
 		catch (IOException e) {
-			
+			System.err.println(e.getMessage());
 		}
 	}
+	
 	
 	public static Workbook readExcel(String path) throws FileNotFoundException, IOException { return readExcel(new File(path)); }
 	public static Workbook readExcel(File f) throws FileNotFoundException, IOException {
@@ -157,5 +164,14 @@ public class Excel {
 		// Finnaly, create a validation with the constraint over the list of ranges and apply to the sheet
 		DataValidation validation = vHelper.createValidation(validationConstraint,  vRanges);
 		s.addValidationData(validation);
+	}
+	
+	public static String rowToLetter(int rowIndex) {
+		String s = "";
+		while(rowIndex >= 0) {
+			s += rowIndex - 26 >= 0 ? "A" : (char) (rowIndex + 65);
+			rowIndex -= 26;
+		}
+		return s;
 	}
 }
