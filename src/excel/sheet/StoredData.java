@@ -31,33 +31,33 @@ public class StoredData {
 	public Sheet createStoredDataSheet() {
 		Sheet s = wb.createSheet("StoredData");
 		Row r = s.createRow(0);
-		CellBuilder.makeTitleCell(wb, r, REST_CAL, "Rest Calorie Multiplier: ");
-		CellBuilder.makeTitleCell(wb, r, WORKOUT_CAL, "Workout Calorie Multiplier: ");
-		CellBuilder.makeTitleCell(wb, r, FAT_REST, "Fat (Rest Day): ");
-		CellBuilder.makeTitleCell(wb, r, CARB_REST, "Carb (Rest Day): ");
-		CellBuilder.makeTitleCell(wb, r, FAT_WORKOUT, "Fat (Workout Day): ");
-		CellBuilder.makeTitleCell(wb, r, CARB_WORKOUT, "Carb (Workout Day): ");
-		CellBuilder.makeTitleCell(wb, r, WORKOUT_CAL, "Workout Calorie Multiplier: ");
-		CellBuilder.makeTitleCell(wb, r, ACTIVITY_MULT, "Activity Multiplier: ");
+		//CellBuilder.makeTitleCell(wb, r, REST_CAL, "Rest Calorie Multiplier: ");
+		//CellBuilder.makeTitleCell(wb, r, WORKOUT_CAL, "Workout Calorie Multiplier: ");
+		//CellBuilder.makeTitleCell(wb, r, FAT_REST, "Fat (Rest Day): ");
+		//CellBuilder.makeTitleCell(wb, r, CARB_REST, "Carb (Rest Day): ");
+		//CellBuilder.makeTitleCell(wb, r, FAT_WORKOUT, "Fat (Workout Day): ");
+		//CellBuilder.makeTitleCell(wb, r, CARB_WORKOUT, "Carb (Workout Day): ");
+		//CellBuilder.makeTitleCell(wb, r, WORKOUT_CAL, "Workout Calorie Multiplier: ");
+		//CellBuilder.makeTitleCell(wb, r, ACTIVITY_MULT, "Activity Multiplier: ");
 		
 		int numRows = Math.max(CarbFatSplit.values().length, Math.max(ActivityMultiplier.values().length, CalorieSplit.values().length));
 		for(int i = 1; i <= numRows; i++)
 			s.createRow(i);
 		
 		for(int i = 0; i < CalorieSplit.values().length; i++) {
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), REST_CAL, CalorieSplit.values()[i].getRest());
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), WORKOUT_CAL, CalorieSplit.values()[i].getWorkout());
+			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), REST_CAL, CalorieSplit.values()[i].getRest());
+			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), WORKOUT_CAL, CalorieSplit.values()[i].getWorkout());
 		}
 		
 		for(int i = 0; i < CarbFatSplit.values().length; i++) {
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), FAT_REST, CarbFatSplit.values()[i].getRestFatMultiplier());
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), CARB_REST, CarbFatSplit.values()[i].getRestCarbMultiplier());
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), FAT_WORKOUT, CarbFatSplit.values()[i].getWorkoutFatMultiplier());
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), CARB_WORKOUT, CarbFatSplit.values()[i].getWorkoutCarbMultiplier());
+		//	CellBuilder.makeNumberCell(wb, s.getRow(i+1), FAT_REST, CarbFatSplit.values()[i].getRestFatMultiplier());
+			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), CARB_REST, CarbFatSplit.values()[i].getRestCarbMultiplier());
+		//	CellBuilder.makeNumberCell(wb, s.getRow(i+1), FAT_WORKOUT, CarbFatSplit.values()[i].getWorkoutFatMultiplier());
+		//	CellBuilder.makeNumberCell(wb, s.getRow(i+1), CARB_WORKOUT, CarbFatSplit.values()[i].getWorkoutCarbMultiplier());
 		}
 		
 		for(int i = 0; i < ActivityMultiplier.values().length; i++) {
-			CellBuilder.makeNumberCell(wb, s.getRow(i+1), ACTIVITY_MULT, ActivityMultiplier.values()[i].getActivityMultiplier(), 3);
+			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), ACTIVITY_MULT, ActivityMultiplier.values()[i].getActivityMultiplier(), 3);
 		}
 		
 		Excel.autosizeCols(s);

@@ -45,27 +45,27 @@ public class Intake {
 		Row title = s.createRow(row);
 		
 		makeIntakeDateCell(wb, title, d);
-		for(int i = 1; i <= DEFAULT_NUM_MEALS; i++)
-			CellBuilder.makeTitleCell(wb, title, i + DATE, "Meal 0" + i);
-		CellBuilder.makeTitleCell(wb, title, EXPECTED_TOTAL, "Expected Total");
-		CellBuilder.makeTitleCell(wb, title, MY_TOTAL, "My Total");
-		CellBuilder.makeTitleCell(wb, title, REMAINING_TOTAL, "Remaining Total");
+		//for(int i = 1; i <= DEFAULT_NUM_MEALS; i++)
+		//	CellBuilder.makeTitleCell(wb, title, i + DATE, "Meal 0" + i);
+		//CellBuilder.makeTitleCell(wb, title, EXPECTED_TOTAL, "Expected Total");
+		//CellBuilder.makeTitleCell(wb, title, MY_TOTAL, "My Total");
+		//CellBuilder.makeTitleCell(wb, title, REMAINING_TOTAL, "Remaining Total");
 		
 		int macroCounter = 0;
 		int goTo = Macro.values().length + 1 + row;
 		for(int i = row + 1; i < goTo; i++) {
 			Row macro = s.createRow(i);
 			
-			CellBuilder.makeTitleCell(wb, macro, MACROS, Macro.values()[macroCounter].getMacroName());
+			//CellBuilder.makeTitleCell(wb, macro, MACROS, Macro.values()[macroCounter].getMacroName());
 			macroCounter++;
 			
 			for(int j = MEALS; j < MEALS + DEFAULT_NUM_MEALS; j++) {
-				CellBuilder.makeNumberCell(wb, macro, j, 0);
+				//CellBuilder.makeNumberCell(wb, macro, j, 0);
 			}
 			
-			CellBuilder.makeNumberCell(wb, macro, EXPECTED_TOTAL, 0);
-			CellBuilder.makeNumberCell(wb, macro, MY_TOTAL, 0);
-			CellBuilder.makeNumberCell(wb, macro, REMAINING_TOTAL, 0);
+			//CellBuilder.makeNumberCell(wb, macro, EXPECTED_TOTAL, 0);
+			//CellBuilder.makeNumberCell(wb, macro, MY_TOTAL, 0);
+			//CellBuilder.makeNumberCell(wb, macro, REMAINING_TOTAL, 0);
 			
 						
 			//Row refRow = settings.getRow();

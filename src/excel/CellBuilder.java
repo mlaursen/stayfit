@@ -26,6 +26,38 @@ public class CellBuilder {
 		c.setCellFormula(f);
 		return c;
 	}
+	
+	public static Cell boldBottomBorderCell(Row r, int index, Object o) {
+		return boldBottomBorderCell(makeCell(r, index, o));
+	}
+	
+	public static Cell boldBottomBorderCell(Cell c) {
+		c.setCellStyle(CellStyles.boldBottomBorderStyle(c.getSheet().getWorkbook()));
+		return c;
+	}
+	
+	public static Cell boldBottomRightBorderCell(Row r, int index, Object o) {
+		return boldBottomRightBorderCell(makeCell(r, index, o));
+	}
+	
+	public static Cell boldBottomRightBorderCell(Cell c) {
+		c.setCellStyle(CellStyles.boldBottomRightBorderStyle(c.getSheet().getWorkbook()));
+		return c;
+	}
+	
+	public static Cell bottomRightBorderCell(Row r, int i, Object o) {
+		return bottomRightBorderCell(makeCell(r, i, o));
+	}
+	
+	public static Cell bottomRightBorderCell(Cell c) {
+		c.setCellStyle(CellStyles.bottomRightBorderStyle(c.getSheet().getWorkbook()));
+		return c;
+	}
+	
+	public static Cell boldAllBorderCell(Cell c) {
+		c.setCellStyle(CellStyles.boldAllBorderStyle(c.getSheet().getWorkbook()));
+		return c;
+	}
 
 	/**
 	 * Creates a cell with its value equal to the cell above plus one
@@ -42,21 +74,7 @@ public class CellBuilder {
 		return makeFormulaCell(r, index, f);
 	}
 	
-	/**
-	 * Creates a cell with the bold cell style
-	 * @param wb	The workbook to create the bold cell style for.
-	 * @param r		The row to add the cell to.
-	 * @param index	The index of the cell.
-	 * @param title	The value to be put into the cell.
-	 * @return		A new cell that has the bold style and the title value.
-	 */
-	public static Cell makeTitleCell(Workbook wb, Row r, int index, String title) {
-		Cell c = r.createCell(index);
-		c.setCellStyle(CellStyles.boldCell(wb));
-		c.setCellValue(title);
-		return c;
-	}
-	
+	/*
 	public static Cell makeNumberCell(Workbook wb, Row r, int index) {
 		Cell c = makeCell(r, index, "");
 		c.setCellStyle(CellStyles.numberCell(wb));
@@ -73,5 +91,5 @@ public class CellBuilder {
 		c.setCellStyle(CellStyles.numberCell(wb, precision));
 		return c;
 	}
-	
+	*/
 }
