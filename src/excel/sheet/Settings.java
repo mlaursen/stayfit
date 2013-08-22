@@ -20,11 +20,13 @@ import enums.Sex;
 import enums.UnitSystem;
 import enums.ActivityMultiplier;
 import excel.CellBuilder;
+import excel.CellStyles;
 import excel.Excel;
 
 public class Settings {
 	
 	public static final Map<String, Integer> COLS = new HashMap<String, Integer>();
+	public static final Map<String, Integer> ROWS = new HashMap<String, Integer>();
 	static {
 		int i = 0;
 		COLS.put("DOW", i++);
@@ -47,10 +49,31 @@ public class Settings {
 		COLS.put("P*", i++);
 		COLS.put("Protein", i++);
 		COLS.put("Assumed Constants", ++i);	// inc before
+		COLS.put("Birthday", i++);
+		COLS.put("Height", i++);
+		COLS.put("Activity", i++);
+		COLS.put("Units", i++);
+		COLS.put("Gender", i++);
+		COLS.put("Alpha", i++);
+		COLS.put("Activity Names", ++i);	// table for storing mult vals
+		COLS.put("Split", i++);
+		COLS.put("Activity Multipliers", i);
+		COLS.put("Carbs", i++);
+		COLS.put("Fat", i++);
+		
+		ROWS.put("Constants", 1);
+		ROWS.put("Constant Values", 2);
+		
+		ROWS.put("Sedentary", 1);
+		ROWS.put("Lightly Active", 2);
+		ROWS.put("Moderately Active", 3);
+		ROWS.put("Very Active", 4);
+		ROWS.put("Extremely Active", 5);
+		
+		ROWS.put("Split Table", 7);
 	}
 	
 	public static final int DEFAULT_NUM_ROWS = 12*7; // 12 weeks
-	public static final double DEFAULT_WEIGHT = 0.0;
 	public static final double DEFAULT_HEIGHT = 71.0;
 	public static final int DEFAULT_AGE = 22;
 	
@@ -87,6 +110,8 @@ public class Settings {
 		createTitleCell(titles, "P*");
 		createTitleCell(titles, "Protein");
 		createTitleCell(titles, "Assumed Constants");
+		createTitleCell(titles, "Activity Names");
+		
 		
 		
 		LocalDate d = new LocalDate();
@@ -94,10 +119,46 @@ public class Settings {
 			Row r = s.createRow(i);
 			makeDOWCell(r, d);
 			makeDateCell(r, d);
+			
 			d = d.plusDays(1);
 			makeWeightCell(r);
 			
+			/*
+			makeEWMA5Cell(r);
+			makeEWMA7Cell(r);
+			makeSmoothedCell(r);
+			makeForecastCell(r);
+			makeResidualCell(r);
+			makeLostWeekCell(r);
+			makeTrendCell(r);
+			makeSlopeCell(r);
+			makeCFSplitCell(r);
+			makeCalChangeCell(r);
+			makeBMRCell(r);
+			makeTDEECell(r);
+			makeUseBMRCell(r);
+			makeCaloriesCell(r);
+			makePMCell(r);
+			makeProteinCell(r);
+			*/
 		}
+		
+		Row r = s.getRow(ROWS.get("Split Table"));
+		createTitleCell(r, "Split");
+		createTitleCell(r, "Carbs");
+		createTitleCell(r, "Fat");
+		
+		r = s.getRow(ROWS.get("Constants"));
+		CellBuilder.makeCell(r, COLS.get("Birthday"), "Birthday");
+		CellBuilder.makeCell(r, COLS.get("Height"), "Height");
+		CellBuilder.makeCell(r, COLS.get("Activity"), "Activity Multiplier");
+		CellBuilder.makeCell(r, COLS.get("Units"), "Units");
+		CellBuilder.makeCell(r, COLS.get("Gender"), "Gender");
+		CellBuilder.makeCell(r, COLS.get("Alpha"), "alpha");
+		
+		//makeDateCell(r, COLS.get("Birthday"));
+		//CellBuilder.makeNumberCell(wb, r, COLS.get("Height"));
+		//Excel.createDropDown(s, enums.ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTS, CONSTS, COLS.get("Activity"), COLS.get("Activity"));
 		
 		/*
 		
@@ -171,15 +232,31 @@ public class Settings {
 	}
 	
 	
-	public Cell makeDateCell(Row r) { return makeDateCell(r, new LocalDate()); }
+	
+	
+	/**
+	 * Creates an empty cell with a date format
+	 * @param r			The row to create the cell
+	 * @param index		The index of the cell
+	 * @return			A cell with a date format.
+	 */
+	public Cell makeDateCell(Row r, int index) { 
+		Cell c = r.createCell(index);
+		c.setCellStyle(CellStyles.dateStyle(this.wb));
+		return c;
+	}
 	public Cell makeDateCell(Row r, LocalDate d) { return makeDateCell(r, COLS.get("Date"), d); }
 	public Cell makeDateCell(Row r, int index, LocalDate d) {
-		Cell c = CellBuilder.makeCell(r, index, d.toString());
-		c.setCellStyle(Excel.dateStyle(this.wb));
+		Cell c = r.getRowNum() == Excel.DATA_START ? r.createCell(index) : CellBuilder.makePrevPlus1Cell(r, index);
+		if(r.getRowNum() == Excel.DATA_START) c.setCellValue(d.toDate());
+		c.setCellStyle(CellStyles.dateStyle(this.wb));
 		return c;
 	}
 	
-	public Cell makeWeightCell(Row r) { return makeWeightCell(r, DEFAULT_WEIGHT); }
+	public Cell makeWeightCell(Row r) {
+		return CellBuilder.makeNumberCell(this.wb, r, COLS.get("Weight"));
+	}
+	
 	public Cell makeWeightCell(Row r, double weight) {
 		return CellBuilder.makeNumberCell(this.wb, r, COLS.get("Weight"), weight);
 	}

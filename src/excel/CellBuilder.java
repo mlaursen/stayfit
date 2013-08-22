@@ -26,6 +26,21 @@ public class CellBuilder {
 		c.setCellFormula(f);
 		return c;
 	}
+
+	/**
+	 * Creates a cell with its value equal to the cell above plus one
+	 * @param r		The row to create the cell
+	 * @param index	The column index to create the cell.
+	 * @return		A formula cell in the form of "=$CELL1 + 1"
+	 */
+	public static Cell makePrevPlus1Cell(Row r, int index) {
+		return makePrevPlusXCell(r, index, 1);
+	}
+	
+	public static Cell makePrevPlusXCell(Row r, int index, int amt) {
+		String f = "$" + Excel.rowToLetter(index) + r.getRowNum() + "+" + amt;
+		return makeFormulaCell(r, index, f);
+	}
 	
 	/**
 	 * Creates a cell with the bold cell style
@@ -37,20 +52,25 @@ public class CellBuilder {
 	 */
 	public static Cell makeTitleCell(Workbook wb, Row r, int index, String title) {
 		Cell c = r.createCell(index);
-		c.setCellStyle(Excel.boldCell(wb));
+		c.setCellStyle(CellStyles.boldCell(wb));
 		c.setCellValue(title);
 		return c;
 	}
 	
+	public static Cell makeNumberCell(Workbook wb, Row r, int index) {
+		Cell c = makeCell(r, index, "");
+		c.setCellStyle(CellStyles.numberCell(wb));
+		return c;
+	}
 	public static Cell makeNumberCell(Workbook wb, Row r, int index, double val) {
 		Cell c = makeCell(r, index, val);
-		c.setCellStyle(Excel.numberCell(wb));
+		c.setCellStyle(CellStyles.numberCell(wb));
 		return c;
 	}
 	
 	public static Cell makeNumberCell(Workbook wb, Row r, int index, double val, int precision) {
 		Cell c = makeCell(r, index, val);
-		c.setCellStyle(Excel.numberCell(wb, precision));
+		c.setCellStyle(CellStyles.numberCell(wb, precision));
 		return c;
 	}
 	

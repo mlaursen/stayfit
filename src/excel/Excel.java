@@ -31,52 +31,20 @@ public class Excel {
 	public static final String DEFAULT_PATH = System.getProperty("user.home") + "\\Documents";
 	public static final String XSSL = ".xlsx";
 	public static final String DEFAULT_WORKBOOK_NAME = "\\Nutrition Tracker" + XSSL;
-	public static final String DATE_FORMAT = "dddd, mmmm dd, yyyy";
+	public static final String DATE_FORMAT = "dd-mmm";
 	public static final String NUMBER_FORMAT = "0.00";
 	public static final int DATA_START = 1;
 	
 	
 	
-	
+	/**
+	 * Autosizes the columns on a sheet
+	 * @param s	Sheet to autosize
+	 */
 	public static void autosizeCols(Sheet s) { autosizeCols(s, s.getRow(0).getLastCellNum()); }
 	public static void autosizeCols(Sheet s, int numCells) {
 		for(int i = 0; i <= numCells; i++) 
 			s.autoSizeColumn(i);
-	}
-	public static CellStyle dateStyle(Workbook wb) {
-		CellStyle cs = wb.createCellStyle();
-		cs.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat(DATE_FORMAT));
-		return cs;
-	}
-	
-	/**
-	 * Creates a cell style with the default bold font size and bolds the font.
-	 * @param wb	The workbook to add the bold style to
-	 * @return		The bold cell style.
-	 */
-	public static CellStyle boldCell(Workbook wb) {
-		CellStyle cs = wb.createCellStyle();
-		Font f = wb.createFont();
-		f.setBoldweight(Font.BOLDWEIGHT_BOLD);
-		cs.setFont(f);
-		return cs;
-	}
-	
-	public static CellStyle numberCell(Workbook wb) {
-		CellStyle cs = wb.createCellStyle();
-		cs.setDataFormat(wb.createDataFormat().getFormat(NUMBER_FORMAT));
-		return cs;
-	}
-	
-	public static CellStyle numberCell(Workbook wb, int precision) {
-		CellStyle cs = wb.createCellStyle();
-		String prec = "0";
-		String format = "0.";
-		for(int i = 0; i < precision; i++)
-			format += prec;
-		
-		cs.setDataFormat(wb.createDataFormat().getFormat(format));
-		return cs;
 	}
 	
 	public static void writeToExcel(Workbook wb) { writeToExcel(wb, DEFAULT_PATH, DEFAULT_WORKBOOK_NAME); }

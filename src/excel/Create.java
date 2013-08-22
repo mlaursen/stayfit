@@ -21,20 +21,20 @@ public class Create {
 		//String workbook = Excel.DEFAULT_PATH + Excel.DEFAULT_WORKBOOK_NAME;
 		//System.out.println(workbook);
 		
-		System.out.println(Excel.rowToLetter(27));
-		System.out.println(Excel.rowToLetter(26));
-		System.out.println(Excel.rowToLetter(25));
-		System.out.println(Excel.rowToLetter(28));
-		System.out.println(Excel.rowToLetter(100));
+		//System.out.println(Excel.rowToLetter(27));
+		//System.out.println(Excel.rowToLetter(26));
+		//System.out.println(Excel.rowToLetter(25));
+		//System.out.println(Excel.rowToLetter(28));
+		//System.out.println(Excel.rowToLetter(100));
 		
-		
+		/*
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int r = fc.showOpenDialog(null);
 		String workbook = (r == JFileChooser.CANCEL_OPTION ? Excel.DEFAULT_PATH : fc.getSelectedFile().getAbsolutePath()) + Excel.DEFAULT_WORKBOOK_NAME;
 		System.out.println(workbook);
-		
-		//String workbook = "C:\\My_Data\\nt.xlsx";
+		*/
+		String workbook = "C:\\My_Data\\Nutrition Tracker.xlsx";
 		Excel.writeToExcel(createWorkbook(), workbook);
 		Desktop.getDesktop().open(new File(workbook));
 		
