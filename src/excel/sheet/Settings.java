@@ -21,43 +21,22 @@ import excel.sheet.cell.Formulas;
 
 public class Settings {
 	
-	public static final short DOW;// = 0;
-	public static final short DATE;// = 1;
-	public static final short EWMA5;// = 2;
-	public static final short EWMA7;// = 3;
-	public static final short WEIGHT;// = 4;
-	public static final short SMOOTHED;// = 5;
-	public static final short FORECAST;// = 6;
-	public static final short RESIDUAL;// = 6;
-	public static final short LOST_WEEK;// = 7;
-	public static final short TREND;// = 8;
-	public static final short SLOPE;// = 9;
-	public static final short CFSPLIT;// = 10;
-	public static final short CHANGE;// = 11;
-	public static final short BMR;// = 12;
-	public static final short TDEE;// = 13;
-	public static final short BMR_;// = 14;
-	public static final short CALORIES;// = 15;
-	public static final short PMULT;// = 16;
-	public static final short PROTEIN;// = 17;
+	public static final short DOW, DATE, EWMA5, EWMA7, WEIGHT, SMOOTHED, FORECAST, RESIDUAL, LOST_WEEK;
+	public static final short TREND, SLOPE, CFSPLIT, CHANGE, BMR, TDEE, BMR_, CALORIES, PMULT, PROTEIN;
 	
-	public static final short CONSTANTS;// = 19;
-	public static final short BIRTHDAY;// = 19;
-	public static final short HEIGHT;// = 20;
-	public static final short ACTIVITY;// = 21;
-	public static final short UNITS;// = 22;
-	public static final short GENDER;// = 23;
-	public static final short ALPHA;// = 24;
-	public static final short ACTIVITIES;// = 26;
-	public static final short SPLITS;
-	public static final short FAT;
-	public static final short CARBS;
+	public static final short CONSTANTS, BIRTHDAY, HEIGHT, ACTIVITY, UNITS, GENDER, ALPHA;
+	public static final short ACTIVITIES, SPLITS, FAT, CARBS, ACTIVITY_VAL;
 	
-	public static final short CONSTANTS_ROW_NAMES = 2;	// rows start at 1 <.<
-	public static final short CONSTANTS_ROW = 3;
+	public static final short CONSTANTS_ROW_NAMES = 1;
+	public static final short CONSTANTS_ROW = 2;
+	public static final short SEDENTARY = 2;
+	public static final short LIGHTLY_ACTIVE = 3;
+	public static final short MODERATELY_ACTIVE = 4;
+	public static final short VERY_ACTIVE = 5;
+	public static final short EXTREMELY_ACTIVE = 6;
 	
-	public static final Map<Short, Short> TITLES_RIGHT_BORDER = new HashMap<Short, Short>();
-	public static final Map<Short, Short> TITLES = new HashMap<Short, Short>();
+	public static final List<Short> TITLES_RIGHT_BORDER = new ArrayList<Short>();
+	public static final List<Short> TITLES = new ArrayList<Short>();
 	static {
 		short i = 0;
 		DOW = i++;
@@ -90,86 +69,38 @@ public class Settings {
 		i++;
 		ACTIVITIES = i;
 		SPLITS = i++;
+		ACTIVITY_VAL = i;
 		CARBS = i++;
 		FAT = i++;
 		
-		TITLES_RIGHT_BORDER.put(WEIGHT, WEIGHT);
-		TITLES_RIGHT_BORDER.put(EWMA7, EWMA7);
-		TITLES_RIGHT_BORDER.put(RESIDUAL, RESIDUAL);
-		TITLES_RIGHT_BORDER.put(LOST_WEEK, LOST_WEEK);
-		TITLES_RIGHT_BORDER.put(SLOPE, SLOPE);
-		TITLES_RIGHT_BORDER.put(CFSPLIT, CFSPLIT);
-		TITLES_RIGHT_BORDER.put(CHANGE, CHANGE);
-		TITLES_RIGHT_BORDER.put(TDEE, TDEE);
-		TITLES_RIGHT_BORDER.put(BMR_, BMR_);
-		TITLES_RIGHT_BORDER.put(CALORIES, CALORIES);
-		TITLES_RIGHT_BORDER.put(PMULT, PMULT);
-		TITLES_RIGHT_BORDER.put(PROTEIN, PROTEIN);
+		TITLES_RIGHT_BORDER.add(WEIGHT, WEIGHT);
+		TITLES_RIGHT_BORDER.add(EWMA7, EWMA7);
+		TITLES_RIGHT_BORDER.add(RESIDUAL, RESIDUAL);
+		TITLES_RIGHT_BORDER.add(LOST_WEEK, LOST_WEEK);
+		TITLES_RIGHT_BORDER.add(SLOPE, SLOPE);
+		TITLES_RIGHT_BORDER.add(CFSPLIT, CFSPLIT);
+		TITLES_RIGHT_BORDER.add(CHANGE, CHANGE);
+		TITLES_RIGHT_BORDER.add(TDEE, TDEE);
+		TITLES_RIGHT_BORDER.add(BMR_, BMR_);
+		TITLES_RIGHT_BORDER.add(CALORIES, CALORIES);
+		TITLES_RIGHT_BORDER.add(PMULT, PMULT);
+		TITLES_RIGHT_BORDER.add(PROTEIN, PROTEIN);
 		
-		TITLES.putAll(TITLES_RIGHT_BORDER);
-		TITLES.put(DOW, DOW);
-		TITLES.put(DATE, DATE);
-		TITLES.put(EWMA5, EWMA5);
-		TITLES.put(SMOOTHED, SMOOTHED);
-		TITLES.put(FORECAST, FORECAST);
-		TITLES.put(BMR, BMR);
-		TITLES.put(TREND, TREND);
-		TITLES.put(CONSTANTS, CONSTANTS);
-		TITLES.put(ACTIVITIES, ACTIVITIES);
-		TITLES.put(SPLITS, SPLITS);
-		TITLES.put(CARBS, CARBS);
-		TITLES.put(FAT, FAT);
+		TITLES.addAll(TITLES_RIGHT_BORDER);
+		TITLES.add(DOW, DOW);
+		TITLES.add(DATE, DATE);
+		TITLES.add(EWMA5, EWMA5);
+		TITLES.add(SMOOTHED, SMOOTHED);
+		TITLES.add(FORECAST, FORECAST);
+		TITLES.add(BMR, BMR);
+		TITLES.add(TREND, TREND);
+		TITLES.add(CONSTANTS, CONSTANTS);
+		TITLES.add(ACTIVITIES, ACTIVITIES);
+		TITLES.add(SPLITS, SPLITS);
+		TITLES.add(CARBS, CARBS);
+		TITLES.add(FAT, FAT);
 	}
 	
-	/*
-	public static final Map<String, Integer> COLS = new HashMap<String, Integer>();
-	public static final Map<String, Integer> ROWS = new HashMap<String, Integer>();
-	static {
-		int i = 0;
-		COLS.put("DOW", i++);
-		COLS.put("Date", i++);
-		COLS.put("Weight", i++);
-		COLS.put("EWMA5", i++);
-		COLS.put("EWMA7", i++);
-		COLS.put("Smoothed", i++);
-		COLS.put("Forecast", i++);
-		COLS.put("Residual", i++);
-		COLS.put("Lost/wk", i++);
-		COLS.put("Trend", i++);
-		COLS.put("Slope", i++);
-		COLS.put("C/F Split", i++);
-		COLS.put("Change", i++);
-		COLS.put("BMR", i++);
-		COLS.put("TDEE", i++);
-		COLS.put("BMR?", i++);
-		COLS.put("Calories", i++);
-		COLS.put("P*", i++);
-		COLS.put("Protein", i++);
-		COLS.put("Assumed Constants", ++i);	// inc before
-		COLS.put("Birthday", i++);
-		COLS.put("Height", i++);
-		COLS.put("Activity", i++);
-		COLS.put("Units", i++);
-		COLS.put("Gender", i++);
-		COLS.put("Alpha", i++);
-		COLS.put("Activity Names", ++i);	// table for storing mult vals
-		COLS.put("Split", i++);
-		COLS.put("Activity Multipliers", i);
-		COLS.put("Carbs", i++);
-		COLS.put("Fat", i++);
-		
-		ROWS.put("Constants", 2);
-		ROWS.put("Constant Values", 3);
-		
-		ROWS.put("Sedentary", 1);
-		ROWS.put("Lightly Active", 2);
-		ROWS.put("Moderately Active", 3);
-		ROWS.put("Very Active", 4);
-		ROWS.put("Extremely Active", 5);
-		
-		ROWS.put("Split Table", 7);
-	}
-	*/
 	public static final int DEFAULT_NUM_ROWS = 12*7; // 12 weeks
 	public static final double DEFAULT_HEIGHT = 71.0;
 	public static final int DEFAULT_AGE = 22;
@@ -234,6 +165,23 @@ public class Settings {
 		
 		}
 		
+		Row cNames = s.getRow(CONSTANTS_ROW_NAMES);
+		Row cVals = s.getRow(CONSTANTS_ROW);
+		createCell(cNames, BIRTHDAY, "Birthday");
+		createCell(cNames, HEIGHT, "Height");
+		createCell(cNames, ACTIVITY, "Activity Multiplier");
+		createCell(cNames, UNITS, "Units");
+		createCell(cNames, GENDER, "Gender");
+		createCell(cNames, ALPHA, "alpha");
+		createCell(cVals, BIRTHDAY, "");
+		createCell(cVals, HEIGHT, "");
+		createCell(cVals, ACTIVITY, "");
+		createCell(cVals, UNITS, "");
+		createCell(cVals, GENDER, "");
+		createCell(cVals, ALPHA, "0.3");
+		
+		Row r = s.getRow(SEDENTARY);
+		r.createCell(ACTIVITY_VAL);
 		//Row cNames = s.getRow(ROWS.get("Constants") - 1);
 		//Row cVals = s.getRow(ROWS.get("Constant Values") - 1);
 		//createCell(cNames, "Birthday");
@@ -355,12 +303,12 @@ public class Settings {
 	
 	public Set<Short> addStyles(short n, int rn) {
 		Set<Short> styles = new HashSet<Short>();
-		if(TITLES.containsKey(n) && rn == Excel.DATA_START - 1) {
+		if(TITLES.contains(n) && rn == Excel.DATA_START - 1) {
 			styles.add(CellStyles.BOLD);
 			styles.add(CellStyles.BORDER_BOTTOM);
 		}
 		
-		if(TITLES_RIGHT_BORDER.containsKey(n)) {
+		if(TITLES_RIGHT_BORDER.contains(n)) {
 			styles.add(CellStyles.BORDER_RIGHT);
 		}
 		
