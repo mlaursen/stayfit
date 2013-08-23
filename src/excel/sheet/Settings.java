@@ -116,33 +116,20 @@ public class Settings {
 			createCell(r, "Weight", "");
 			createCell(r, "EWMA5", "");
 			createCell(r, "EWMA7", "");
-			
-			/*
-			makeDOWCell(r, d);
-			makeDateCell(r, d);
-			
-			d = d.plusDays(1);
-			makeWeightCell(r);
-			
-			
-			makeEWMACell(r, 5);
-			makeEWMACell(r, 7);
-			makeSmoothedCell(r);
-			makeForecastCell(r);
-			
-			makeResidualCell(r);
-			makeLostWeekCell(r);
-			makeTrendCell(r);
-			makeSlopeCell(r);
-			makeCFSplitCell(r);
-			makeCalChangeCell(r);
-			makeBMRCell(r);
-			makeTDEECell(r);
-			makeUseBMRCell(r);
-			makeCaloriesCell(r);
-			makePMCell(r);
-			makeProteinCell(r);
-			*/
+			createCell(r, "Smoothed", "");
+			createCell(r, "Forecast", "");
+			createCell(r, "Residual", "");
+			createCell(r, "Lost/wk", "");
+			createCell(r, "Trend", "");
+			createCell(r, "Slope", "");
+			createCell(r, "C/F Split", "");
+			createCell(r, "Change", "");
+			createCell(r, "BMR", "");
+			createCell(r, "TDEE", "");
+			createCell(r, "BMR?", "");
+			createCell(r, "Calories", "");
+			createCell(r, "P*", "");
+			createCell(r, "Protein", "");
 		
 		}
 		/*
@@ -166,7 +153,7 @@ public class Settings {
 		//Excel.createDropDown(s, enums.ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTS, CONSTS, COLS.get("Activity"), COLS.get("Activity"));
 		
 		/*
-		
+		old comment
 		
 		Calendar c = Calendar.getInstance();
 		Date d = new Date();
@@ -262,7 +249,7 @@ public class Settings {
 			styles.add(CellStyles.BORDER_BOTTOM);
 		}
 		
-		if(n == "Weight" || n == "EWMA7" || n == "Residual" || n == "Lost/Wk" || n == "Slope" || n == "C/F Split"
+		if(n == "Weight" || n == "EWMA7" || n == "Residual" || n == "Lost/wk" || n == "Slope" || n == "C/F Split"
 		|| n == "Change"|| n == "TDEE"|| n == "BMR?"|| n == "Calories"|| n == "P*" || n == "Protein") {
 			styles.add(CellStyles.BORDER_RIGHT);
 		}
@@ -290,7 +277,7 @@ public class Settings {
 				styles.add(CellStyles.GRAY_FILL);
 			
 			if(rn == 5)
-				styles.add(CellStyles.BORDER_BOTTOM);
+				styles.add(CellStyles.BORDER_BOTTOM_THIN);
 			
 			if(n.equals("Residual"))
 				styles.add(CellStyles.BORDER_RIGHT);
@@ -302,120 +289,8 @@ public class Settings {
 		return styles;
 	}
 	
-	public Cell createCell2(Row r, String n) {
-		return CellBuilder.makeCell(r, COLS.get(n), n);
-	}
-	
-	public Cell makeDOWCell(Row r, LocalDate d) {
-		String formula = "TEXT(" + getCol("Date") + (r.getRowNum()+1) + ", \"ddd\")";
-		return CellBuilder.makeFormulaCell(r, COLS.get("DOW"), formula);
-	}
 	
 	
-	
-	
-	/**
-	 * Creates an empty cell with a date format
-	 * @param r			The row to create the cell
-	 * @param index		The index of the cell
-	 * @return			A cell with a date format.
-	 */
-	public Cell makeDateCell(Row r, int index) { 
-		Cell c = r.createCell(index);
-		//c.setCellStyle(CellStyles.dateStyle(this.wb));
-		return c;
-	}
-	public Cell makeDateCell(Row r, LocalDate d) { return makeDateCell(r, COLS.get("Date"), d); }
-	public Cell makeDateCell(Row r, int index, LocalDate d) {
-		Cell c = r.getRowNum() == Excel.DATA_START ? r.createCell(index) : CellBuilder.makePrevPlus1Cell(r, index);
-		if(r.getRowNum() == Excel.DATA_START) c.setCellValue(d.toDate());
-		//c.setCellStyle(CellStyles.dateStyle(this.wb));
-		return c;
-	}
-	
-	public Cell makeWeightCell(Row r) {
-		Cell c = CellBuilder.makeCell(r, COLS.get("Weight"), "");
-		//c.setCellStyle(CellStyles.numberStyle(wb, false, 1));
-		return c;
-	}
-
-	/*
-	public String ewma5Formula(int rn) {
-		String avg = "AVERAGE(0.25*" + getCol("Weight") + (rn-4) + ",";
-		avg += "0.5*" + getCol("Weight") + (rn-3) + ",";
-		avg += getCol("Weight") + (rn-2) + ",";
-		avg += "1.25*" + getCol("Weight") + (rn-1) + ",";
-		avg += "2*" + getCol("Weight") + rn + ")";
-		return avg;
-	}
-	
-	public String ewma7Formula(int rn) {
-		String avg = "AVERAGE(0.25*" + getCol("Weight") + (rn-6) + ",";
-		avg += "0.5*" + getCol("Weight") + (rn-5) + ",";
-		avg += "0.75*" + getCol("Weight") + (rn-4) + ",";
-		avg += getCol("Weight") + (rn-3) + ",";
-		avg += "1.25*" + getCol("Weight") + (rn-2) + ",";
-		avg += "1.5*" + getCol("Weight") + (rn-2) + ",";
-		avg += "1.75*" + getCol("Weight") + rn + ")";
-		return avg;
-	}
-	
-	public String ewmaFormula(int rn, int x) {
-		return "IF(" + getCol("Weight") + (rn+1) + "=\"\",NA()," + (x == 5 ? ewma5Formula(rn) : ewma7Formula(rn)) + ")";
-	}
-	*/
-	public Cell makeEWMACell(Row r, int n) {
-		Cell c = CellBuilder.makeCell(r, COLS.get("EWMA" + n), "");
-		int rn = r.getRowNum();
-		Set<String> borders = addBorders("ewma" + n, rn);
-		if(rn <= n) { 
-			//c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
-		}
-		else {
-			c.setCellFormula(Formulas.ewmaFormula(rn, n));
-			//c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
-		}
-		
-		return c;
-	}
-	
-	public Set<String> addBorders(String which, int rn) {
-		System.out.println(which);
-		Set<String> bs = new HashSet<String>();
-		if(rn % 7 == 0)
-			bs.add("b");
-		
-		if(which.contains("ewma")) {
-			int n = Integer.parseInt(which.substring(which.length()-1));
-			System.out.println("ewma");
-			System.out.println(n);
-			if(n == 5 || rn > 5)
-				bs.add("l");
-			
-			if(n == 7)
-				bs.add("r");
-			
-			if(rn == n && !bs.contains("b"))
-				bs.add("b-thin");
-		}
-		else if(which.equals("Smoothed") || which.equals("Forecast") || which.equals("Residual")) {
-			if(rn == 5) {
-				bs.add("b");
-			}
-			
-			if(which.equals("Residual")) {
-				bs.add("r");
-			}
-		}
-		return bs;
-	}
-	
-	public Cell makeSFRCell(Row r, String which) {
-		Cell c = CellBuilder.makeCell(r, COLS.get(which), "");
-		int rn = r.getRowNum();
-		//List<String> borders = addBorders(which);
-		return c;
-	}
 	
 	public Cell makeSmoothedCell(Row r) {
 		Cell c = CellBuilder.makeCell(r, COLS.get("Smoothed"), "");

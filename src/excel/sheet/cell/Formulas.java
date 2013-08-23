@@ -34,4 +34,13 @@ public class Formulas {
 	public static String dowFormula(int rn) {
 		return "TEXT(" + Settings.getCol("Date") + (rn+1) + ", \"ddd\")";
 	}
+	
+	public static String smoothed(int rn) {
+		String a = Settings.getConst("Alpha");
+		String w = Settings.getCol("Weight");
+		String f = Settings.getCol("Forecast");
+		String form = "(" + a + "*" + w + rn + ")";
+		form += "+((1-" + a + ")*" + f + rn + ")";
+		return "IF(" + w + (rn+1) + "=\"\",NA()," + form + ")";
+	}
 }
