@@ -1,12 +1,8 @@
 package excel;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+
 import java.util.Set;
 
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -29,7 +25,10 @@ public class CellStyles {
 	public static final short BOLD = 10;
 	public static final short GRAY_FILL = 11;
 	public static final short NUMBER = 12;
-	public static final short DATE = 13;
+	public static final short NUMBER_1 = 13;
+	public static final short NUMBER_2 = 14;
+	public static final short NUMBER_4 = 15;
+	public static final short DATE = 16;
 
 	public static Cell applyStyles(Set<Short> styles, Cell c) {
 		Workbook wb = c.getSheet().getWorkbook();
@@ -47,9 +46,9 @@ public class CellStyles {
 				//System.out.println("Applying gray fill");
 				applyGrayFillStyle(cs);
 			}
-			else if(s == NUMBER) {
+			else if(s >= NUMBER && s <= NUMBER_4) {
 				//System.out.println("Applying number format");
-				applyNumberStyle(cs, wb);
+				applyNumberStyle(cs, wb, s - NUMBER);
 			}
 			else if(s == DATE) {
 				//System.out.println("Applying date format");
@@ -90,11 +89,10 @@ public class CellStyles {
 		return cs;
 	}
 	
-	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb) { return applyNumberStyle(cs, wb, NUMBER_FORMAT); }
 	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb, int prec) {
 		String format = "0.";
 		for(int i = 0; i < prec; i++)
-			format += "0";
+			format += 0;
 		return applyNumberStyle(cs, wb, format);
 	}
 	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb, String format) {

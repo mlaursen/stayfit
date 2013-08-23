@@ -35,6 +35,10 @@ public class Settings {
 	public static final short VERY_ACTIVE = 5;
 	public static final short EXTREMELY_ACTIVE = 6;
 	
+	public static final List<Short> NON_NUMBER_FIELDS = new ArrayList<Short>();
+	public static final List<Short> NUMBER1 = new ArrayList<Short>();
+	public static final List<Short> NUMBER2 = new ArrayList<Short>();
+	public static final List<Short> NUMBER4 = new ArrayList<Short>();
 	public static final List<Short> TITLES_RIGHT_BORDER = new ArrayList<Short>();
 	public static final List<Short> TITLES = new ArrayList<Short>();
 	static {
@@ -99,6 +103,33 @@ public class Settings {
 		TITLES.add(SPLITS);
 		TITLES.add(CARBS);
 		TITLES.add(FAT);
+		
+		NUMBER1.add(WEIGHT);
+		NUMBER2.add(EWMA5);
+		NUMBER2.add(EWMA7);
+		NUMBER2.add(TREND);
+		NUMBER2.add(SLOPE);
+		NUMBER2.add(BMR);
+		NUMBER2.add(TDEE);
+		NUMBER2.add(CALORIES);
+		NUMBER2.add(PMULT);
+		NUMBER2.add(PROTEIN);
+		NUMBER4.add(SMOOTHED);
+		NUMBER4.add(FORECAST);
+		NUMBER4.add(RESIDUAL);
+		
+
+		/* MIGHT NEED LATER
+		NON_NUMBER_FIELDS.add(DOW);
+		NON_NUMBER_FIELDS.add(DATE);
+		NON_NUMBER_FIELDS.add(CFSPLIT);
+		NON_NUMBER_FIELDS.add(BMR_);
+		NON_NUMBER_FIELDS.add(BIRTHDAY);
+		NON_NUMBER_FIELDS.add(HEIGHT);
+		NON_NUMBER_FIELDS.add(ACTIVITY);
+		NON_NUMBER_FIELDS.add(UNITS);
+		NON_NUMBER_FIELDS.add(GENDER);
+		*/
 	}
 	
 	public static final int DEFAULT_NUM_ROWS = 12*7; // 12 weeks
@@ -274,23 +305,25 @@ public class Settings {
 	public Cell createCell(Row r, short n, Object v) {
 		int rn = r.getRowNum();
 		Cell c = CellBuilder.makeCell(r, n, v);
-		if(n == DATE && rn >= Excel.DATA_START) {
-			c = CellBuilder.makePrevPlus1Cell(r, n);
-			if(rn == Excel.DATA_START) {
-				c = r.createCell(n); 
-				c.setCellValue(((LocalDate) v).toDate());
+		if(rn >= Excel.DATA_START) {
+			if(n == DATE) {
+				c = CellBuilder.makePrevPlus1Cell(r, n);
+				if(rn == Excel.DATA_START) {
+					c = r.createCell(n); 
+					c.setCellValue(((LocalDate) v).toDate());
+				}
 			}
-		}
-		//else if(n.contains("EWMA")) {
-		if(n == EWMA5 || n == EWMA7) {
-			int x = n == EWMA5 ? 5 : 7;
-			if(rn > x)
-				c = CellBuilder.makeFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
-		}
-		else if(rn > 5) {	// grayed otherwise with empty string as value
-			//if(n == "Smoothed") {
-			if(n == SMOOTHED) {
-				c = CellBuilder.makeFormulaCell(r, n, Formulas.smoothed(rn));
+			//else if(n.contains("EWMA")) {
+			if(n == EWMA5 || n == EWMA7) {
+				int x = n == EWMA5 ? 5 : 7;
+				if(rn > x)
+					c = CellBuilder.makeFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
+			}
+			else if(rn > 5) {	// grayed otherwise with empty string as value
+				//if(n == "Smoothed") {
+				if(n == SMOOTHED) {
+					c = CellBuilder.makeFormulaCell(r, n, Formulas.smoothed(rn));
+				}
 			}
 		}
 		return createCell(c, n, rn);
@@ -303,6 +336,15 @@ public class Settings {
 	
 	public Set<Short> addStyles(short n, int rn) {
 		Set<Short> styles = new HashSet<Short>();
+		if(NUMBER1.contains(n))
+			styles.add(CellStyles.NUMBER_1);
+		
+		if(NUMBER2.contains(n))
+			styles.add(CellStyles.NUMBER_2);
+		
+		if(NUMBER4.contains(n))
+			styles.add(CellStyles.NUMBER_4);
+		
 		if(TITLES.contains(n) && rn == Excel.DATA_START - 1) {
 			styles.add(CellStyles.BOLD);
 			styles.add(CellStyles.BORDER_BOTTOM);
