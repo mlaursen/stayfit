@@ -34,7 +34,8 @@ public class Create {
 		String workbook = (r == JFileChooser.CANCEL_OPTION ? Excel.DEFAULT_PATH : fc.getSelectedFile().getAbsolutePath()) + Excel.DEFAULT_WORKBOOK_NAME;
 		System.out.println(workbook);
 		*/
-		String workbook = "C:\\My_Data\\Nutrition Tracker.xlsx";
+		//String workbook = "C:\\My_Data\\" + Excel.DEFAULT_WORKBOOK_NAME;
+		String workbook = Excel.DEFAULT_PATH + Excel.DEFAULT_WORKBOOK_NAME;
 		Excel.writeToExcel(createWorkbook(), workbook);
 		Desktop.getDesktop().open(new File(workbook));
 		
