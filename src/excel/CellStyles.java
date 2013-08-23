@@ -2,9 +2,12 @@ package excel;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -13,7 +16,53 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class CellStyles {
 	public static final String DATE_FORMAT = "dd-mmm";
 	public static final String NUMBER_FORMAT = "0.00";
+	public static final short BORDER_LEFT = 0;
+	public static final short BORDER_RIGHT = 1;
+	public static final short BORDER_BOTTOM = 2;
+	public static final short BORDER_TOP = 3;
+	public static final short BORDER_ALL = 4;
+	public static final short BORDER_LEFT_THIN = 5;
+	public static final short BORDER_RIGHT_THIN = 6;
+	public static final short BORDER_BOTTOM_THIN = 7;
+	public static final short BORDER_TOP_THIN = 8;
+	public static final short BORDER_ALL_THIN = 9;
+	public static final short BOLD = 10;
+	public static final short GRAY_FILL = 11;
+	public static final short NUMBER = 12;
+	public static final short DATE = 13;
 
+	public static Cell applyStyles(Set<Short> styles, Cell c) {
+		Workbook wb = c.getSheet().getWorkbook();
+		CellStyle cs = wb.createCellStyle();
+		for(Short s : styles) {
+			if(s == BOLD) {
+				//System.out.println("Applying bold");
+				applyBoldStyle(cs, wb);
+			}
+			else if(s >= BORDER_LEFT && s <= BORDER_ALL_THIN) {
+				//System.out.println("Applying borders");
+				applyBorderStyle(cs, s);
+			}
+			else if(s == GRAY_FILL) {
+				//System.out.println("Applying gray fill");
+				applyGrayFillStyle(cs);
+			}
+			else if(s == NUMBER) {
+				//System.out.println("Applying number format");
+				applyNumberStyle(cs, wb);
+			}
+			else if(s == DATE) {
+				//System.out.println("Applying date format");
+				applyDateStyle(cs, wb);
+			}
+			else {
+				//System.out.println("Invalid choice");
+			}
+		}
+		//System.out.println(cs.getBorderBottom());
+		c.setCellStyle(cs);
+		return c;
+	}
 	
 	private static CellStyle applyBoldStyle(CellStyle cs, Workbook wb) {
 		Font f = wb.createFont();
@@ -22,31 +71,16 @@ public class CellStyles {
 		return cs;
 	}
 	
-	private static CellStyle applyBottomBorderStyle(CellStyle cs) {
-		cs.setBorderBottom(CellStyle.BORDER_MEDIUM);
-		return cs;
-	}
-	
-	private static CellStyle applyTopBorderStyle(CellStyle cs) {
-		cs.setBorderTop(CellStyle.BORDER_MEDIUM);
-		return cs;
-	}
-	
-	private static CellStyle applyLeftBorderStyle(CellStyle cs) {
-		cs.setBorderLeft(CellStyle.BORDER_MEDIUM);
-		return cs;
-	}
-	
-	private static CellStyle applyRightBorderStyle(CellStyle cs) {
-		cs.setBorderRight(CellStyle.BORDER_MEDIUM);
-		return cs;
-	}
-	
-	private static CellStyle applyAllBorderStyle(CellStyle cs) {
-		applyTopBorderStyle(cs);
-		applyBottomBorderStyle(cs);
-		applyLeftBorderStyle(cs);
-		applyRightBorderStyle(cs);
+	private static CellStyle applyBorderStyle(CellStyle cs, short dir) {
+		short type = (dir >= BORDER_LEFT_THIN && dir <= BORDER_ALL_THIN) ? CellStyle.BORDER_THIN : CellStyle.BORDER_MEDIUM;
+		if(dir == BORDER_LEFT || dir == BORDER_LEFT_THIN || dir == BORDER_ALL)
+			cs.setBorderLeft(type);
+		else if(dir == BORDER_RIGHT || dir == BORDER_RIGHT_THIN || dir == BORDER_ALL)
+			cs.setBorderRight(type);
+		else if(dir == BORDER_BOTTOM || dir == BORDER_BOTTOM_THIN || dir == BORDER_ALL)
+			cs.setBorderBottom(type);
+		else if(dir == BORDER_TOP || dir == BORDER_TOP_THIN || dir == BORDER_ALL)
+			cs.setBorderTop(type);
 		return cs;
 	}
 	
@@ -73,54 +107,82 @@ public class CellStyles {
 		return cs;
 	}
 	
+	/*
+	private static CellStyle applyBottomBorderStyle(CellStyle cs) { return applyBottomBorderStyle(cs, false); }
+	private static CellStyle applyBottomBorderStyle(CellStyle cs, boolean thin) {
+		cs.setBorderBottom((thin ? CellStyle.BORDER_THIN : CellStyle.BORDER_MEDIUM));
+		return cs;
+	}
 	
-	/**
-	 * Bolds, and puts a medium border on the bottom of a cell
-	 * @param wb
-	 * @return
-	 */
+	private static CellStyle applyTopBorderStyle(CellStyle cs) {
+		cs.setBorderTop(CellStyle.BORDER_MEDIUM);
+		return cs;
+	}
+	
+	private static CellStyle applyLeftBorderStyle(CellStyle cs) {
+		cs.setBorderLeft(CellStyle.BORDER_MEDIUM);
+		return cs;
+	}
+	
+	private static CellStyle applyRightBorderStyle(CellStyle cs) {
+		cs.setBorderRight(CellStyle.BORDER_MEDIUM);
+		return cs;
+	}
+	
+	
+	private static CellStyle applyAllBorderStyle(CellStyle cs) { return applyAllBorderStyle(cs, BORDER_MEDIUM); }
+	private static CellStyle applyAllBorderStyle(CellStyle cs, short type) {
+		applyBorderStyle(cs, BORDER_ALL, type);
+		return cs;
+	}
+	*/
+	
+	
+	
+	
+	/*
 	public static CellStyle boldBottomBorderStyle(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
 		applyBoldStyle(cs, wb);
-		applyBottomBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_BOTTOM);
 		return cs;
 	}
 	
 	public static CellStyle boldAllBorderStyle(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
 		applyBoldStyle(cs, wb);
-		applyAllBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_ALL);
 		return cs;
 	}
 	
 	public static CellStyle boldBottomRightBorderStyle(Workbook wb) {
 		CellStyle cs = boldBottomBorderStyle(wb);
-		applyRightBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_RIGHT);
 		return cs;
 	}
 
 	public static CellStyle bottomBorderStyle(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
-		applyBottomBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_BOTTOM);
 		return cs;
 	}
 	
 	
 	public static CellStyle bottomRightBorderStyle(Workbook wb) {
 		CellStyle cs = bottomBorderStyle(wb);
-		applyRightBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_RIGHT);
 		return cs;
 	}
 	
 	public static CellStyle leftBorderStyle(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
-		applyLeftBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_LEFT);
 		return cs;
 	}
 	
 	public static CellStyle rightBorderStyle(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
-		applyRightBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_RIGHT);
 		return cs;
 	}
 	
@@ -130,32 +192,24 @@ public class CellStyles {
 		return cs;
 	}
 	
-	public static CellStyle grayFillBorderStyle(Workbook wb, List<String> bs) {
+	public static CellStyle grayFillBorderStyle(Workbook wb, Collection<Short> bs) {
 		CellStyle cs = grayFillStyle(wb);
-		if(bs.contains("l"))
-			applyLeftBorderStyle(cs);
-		
-		if(bs.contains("r"))
-			applyRightBorderStyle(cs);
-		
-		if(bs.contains("b"))
-			applyBottomBorderStyle(cs);
-		
-		if(bs.contains("t"))
-			applyTopBorderStyle(cs);
+		for(Short b : bs) {
+			applyBorderStyle(cs, b);
+		}
 		
 		return cs;
 	}
 	
 	public static CellStyle grayFillLeftBorderStyle(Workbook wb) {
 		CellStyle cs = grayFillStyle(wb);
-		applyLeftBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_LEFT);
 		return cs;
 	}
 	
 	public static CellStyle grayFillRightBorderStyle(Workbook wb) {
 		CellStyle cs = grayFillStyle(wb);
-		applyRightBorderStyle(cs);
+		applyBorderStyle(cs, BORDER_RIGHT);
 		return cs;
 	}
 	
@@ -164,7 +218,6 @@ public class CellStyles {
 		applyBottomBorderStyle(cs);
 		return cs;
 	}
-	
 	public static CellStyle numberStyle(Workbook wb, boolean leftBorder) { return numberStyle(wb, leftBorder, 2); }
 	public static CellStyle numberStyle(Workbook wb, boolean leftBorder, int prec) {
 		CellStyle cs = wb.createCellStyle();
@@ -179,6 +232,7 @@ public class CellStyles {
 	}
 	
 	
+	*/
 	////////////////////////////////////////
 	// OLD NON-UPDATED VERSIONS
 	/*

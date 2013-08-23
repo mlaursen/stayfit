@@ -32,7 +32,10 @@ public class CellBuilder {
 	}
 	
 	public static Cell boldBottomBorderCell(Cell c) {
-		c.setCellStyle(CellStyles.boldBottomBorderStyle(c.getSheet().getWorkbook()));
+		CellStyle cs = c.getCellStyle();
+		//CellStyles.applyBorderStyle(cs, CellStyles.BORDER_BOTTOM);
+		c.setCellStyle(cs);
+		//c.setCellStyle(CellStyles.boldBottomBorderStyle(c.getSheet().getWorkbook()));
 		return c;
 	}
 	
@@ -41,7 +44,11 @@ public class CellBuilder {
 	}
 	
 	public static Cell boldBottomRightBorderCell(Cell c) {
-		c.setCellStyle(CellStyles.boldBottomRightBorderStyle(c.getSheet().getWorkbook()));
+		CellStyle cs = c.getCellStyle();
+		//CellStyles.applyBorderStyle(cs, CellStyles.BORDER_BOTTOM);
+		//CellStyles.applyBorderStyle(cs, CellStyles.BORDER_RIGHT);
+		//CellStyles.applyBoldStyle(cs, c.getSheet().getWorkbook());
+		//c.setCellStyle(CellStyles.boldBottomRightBorderStyle(c.getSheet().getWorkbook()));
 		return c;
 	}
 	
@@ -50,12 +57,12 @@ public class CellBuilder {
 	}
 	
 	public static Cell bottomRightBorderCell(Cell c) {
-		c.setCellStyle(CellStyles.bottomRightBorderStyle(c.getSheet().getWorkbook()));
+		//c.setCellStyle(CellStyles.bottomRightBorderStyle(c.getSheet().getWorkbook()));
 		return c;
 	}
 	
 	public static Cell boldAllBorderCell(Cell c) {
-		c.setCellStyle(CellStyles.boldAllBorderStyle(c.getSheet().getWorkbook()));
+		//c.setCellStyle(CellStyles.boldAllBorderStyle(c.getSheet().getWorkbook()));
 		return c;
 	}
 

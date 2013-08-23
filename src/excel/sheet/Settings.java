@@ -1,11 +1,11 @@
 package excel.sheet;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,16 +14,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
 import user.User;
-import enums.CalorieSplit;
-import enums.CarbFatSplit;
-import enums.DayType;
-import enums.Formula;
-import enums.Sex;
-import enums.UnitSystem;
-import enums.ActivityMultiplier;
 import excel.CellBuilder;
 import excel.CellStyles;
 import excel.Excel;
+import excel.sheet.cell.Formulas;
 
 public class Settings {
 	
@@ -90,31 +84,40 @@ public class Settings {
 	public Sheet createSettingsSheet() {
 		Sheet s = this.wb.createSheet("Settings");
 		Row titles = s.createRow(0);
-		CellBuilder.boldBottomBorderCell(createCell(titles, "DOW"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "Date"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Weight"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "EWMA5"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "EWMA7"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "Smoothed"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "Forecast"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Residual"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Lost/wk"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "Trend"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Slope"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "C/F Split"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Change"));
-		CellBuilder.boldBottomBorderCell(createCell(titles, "BMR"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "TDEE"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "BMR?"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Calories"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "P*"));
-		CellBuilder.boldBottomRightBorderCell(createCell(titles, "Protein"));
-		CellBuilder.boldAllBorderCell(createCell(titles, "Assumed Constants"));
-		CellBuilder.boldAllBorderCell(createCell(titles, "Activity Names"));
+		createCell(titles, "DOW");
+		createCell(titles, "Date");
+		createCell(titles, "Weight");
+		createCell(titles, "EWMA5");
+		createCell(titles, "EWMA7");
+		createCell(titles, "Smoothed");
+		createCell(titles, "Forecast");
+		createCell(titles, "Residual");
+		createCell(titles, "Lost/wk");
+		createCell(titles, "Trend");
+		createCell(titles, "Slope");
+		createCell(titles, "C/F Split");
+		createCell(titles, "Change");
+		createCell(titles, "BMR");
+		createCell(titles, "TDEE");
+		createCell(titles, "BMR?");
+		createCell(titles, "Calories");
+		createCell(titles, "P*");
+		createCell(titles, "Protein");
+		createCell(titles, "Assumed Constants");
+		createCell(titles, "Activity Names");
+		
 		
 		LocalDate d = new LocalDate();
 		for(int i = Excel.DATA_START; i <= DEFAULT_NUM_ROWS; i++) {
 			Row r = s.createRow(i);
+			createFormulaCell(r, "DOW", Formulas.dowFormula(r.getRowNum()));
+			createCell(r, "Date", d);
+			d = d.plusDays(1);
+			createCell(r, "Weight", "");
+			createCell(r, "EWMA5", "");
+			createCell(r, "EWMA7", "");
+			
+			/*
 			makeDOWCell(r, d);
 			makeDateCell(r, d);
 			
@@ -126,7 +129,7 @@ public class Settings {
 			makeEWMACell(r, 7);
 			makeSmoothedCell(r);
 			makeForecastCell(r);
-			/*
+			
 			makeResidualCell(r);
 			makeLostWeekCell(r);
 			makeTrendCell(r);
@@ -140,7 +143,10 @@ public class Settings {
 			makePMCell(r);
 			makeProteinCell(r);
 			*/
+		
 		}
+		/*
+		 * just commented this 8/23
 		
 		Row r = s.getRow(ROWS.get("Split Table"));
 		createCell(r, "Split");
@@ -154,7 +160,7 @@ public class Settings {
 		CellBuilder.makeCell(r, COLS.get("Units"), "Units");
 		CellBuilder.makeCell(r, COLS.get("Gender"), "Gender");
 		CellBuilder.makeCell(r, COLS.get("Alpha"), "alpha");
-		
+		*/
 		//makeDateCell(r, COLS.get("Birthday"));
 		//CellBuilder.makeNumberCell(wb, r, COLS.get("Height"));
 		//Excel.createDropDown(s, enums.ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTS, CONSTS, COLS.get("Activity"), COLS.get("Activity"));
@@ -221,8 +227,82 @@ public class Settings {
 		return null; //new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
 	}
 	
+	public Cell createFormulaCell(Row r, String n, String f) {
+		return createCell(CellBuilder.makeFormulaCell(r, COLS.get(n), f), n, r.getRowNum());
+	}
+	public Cell createCell(Row r, String n) { return createCell(r, n, n); }
+	public Cell createCell(Row r, String n, Object v) {
+		int rn = r.getRowNum();
+		int i = COLS.get(n);
+		Cell c = CellBuilder.makeCell(r, i, v);
+		if(n == "Date" && rn >= Excel.DATA_START) {
+			c = CellBuilder.makePrevPlus1Cell(r, i);
+			if(rn == Excel.DATA_START) {
+				c = r.createCell(i); 
+				c.setCellValue(((LocalDate) v).toDate());
+			}
+		}
+		else if(n.contains("EWMA")) {
+			int x = Integer.parseInt(n.substring(n.length()-1));
+			if(rn > x)
+				c = CellBuilder.makeFormulaCell(r, i, Formulas.ewmaFormula(rn, x));
+		}
+		return createCell(c, n, rn);
+	}
+	public Cell createCell(Cell c, String n, int rn) {
+		Set<Short> styles = addStyles(n, rn);
+		CellStyles.applyStyles(styles, c);
+		return c;
+	}
 	
-	public Cell createCell(Row r, String n) {
+	public Set<Short> addStyles(String n, int rn) {
+		Set<Short> styles = new HashSet<Short>();
+		if(COLS.containsKey(n) && rn == Excel.DATA_START - 1) {
+			styles.add(CellStyles.BOLD);
+			styles.add(CellStyles.BORDER_BOTTOM);
+		}
+		
+		if(n == "Weight" || n == "EWMA7" || n == "Residual" || n == "Lost/Wk" || n == "Slope" || n == "C/F Split"
+		|| n == "Change"|| n == "TDEE"|| n == "BMR?"|| n == "Calories"|| n == "P*" || n == "Protein") {
+			styles.add(CellStyles.BORDER_RIGHT);
+		}
+		
+		if(rn % 7 == 0)
+			styles.add(CellStyles.BORDER_BOTTOM);
+		
+		if(n.contains("EWMA")) {
+			int e = Integer.parseInt(n.substring(n.length()-1));
+			//System.out.println("ewma");
+			//System.out.println(e);
+			if(rn >= Excel.DATA_START && (rn <= 5 || (e == 7 && rn <= e))) 
+				styles.add(CellStyles.GRAY_FILL);
+			if(e == 5 && rn > 5 && rn < 8)
+				styles.add(CellStyles.BORDER_RIGHT_THIN);
+			
+			if(e == 7)
+				styles.add(CellStyles.BORDER_RIGHT);
+			
+			if(rn == e && e == 5)
+				styles.add(CellStyles.BORDER_BOTTOM_THIN);
+		}
+		else if(n.equals("Smoothed") || n.equals("Forecast") || n.equals("Residual")) {
+			if(rn <= 5 && rn >= Excel.DATA_START)
+				styles.add(CellStyles.GRAY_FILL);
+			
+			if(rn == 5)
+				styles.add(CellStyles.BORDER_BOTTOM);
+			
+			if(n.equals("Residual"))
+				styles.add(CellStyles.BORDER_RIGHT);
+		}
+		else if(n.equals("Date")) {
+			styles.add(CellStyles.DATE);
+		}
+		//System.out.println(styles);
+		return styles;
+	}
+	
+	public Cell createCell2(Row r, String n) {
 		return CellBuilder.makeCell(r, COLS.get(n), n);
 	}
 	
@@ -242,24 +322,24 @@ public class Settings {
 	 */
 	public Cell makeDateCell(Row r, int index) { 
 		Cell c = r.createCell(index);
-		c.setCellStyle(CellStyles.dateStyle(this.wb));
+		//c.setCellStyle(CellStyles.dateStyle(this.wb));
 		return c;
 	}
 	public Cell makeDateCell(Row r, LocalDate d) { return makeDateCell(r, COLS.get("Date"), d); }
 	public Cell makeDateCell(Row r, int index, LocalDate d) {
 		Cell c = r.getRowNum() == Excel.DATA_START ? r.createCell(index) : CellBuilder.makePrevPlus1Cell(r, index);
 		if(r.getRowNum() == Excel.DATA_START) c.setCellValue(d.toDate());
-		c.setCellStyle(CellStyles.dateStyle(this.wb));
+		//c.setCellStyle(CellStyles.dateStyle(this.wb));
 		return c;
 	}
 	
 	public Cell makeWeightCell(Row r) {
 		Cell c = CellBuilder.makeCell(r, COLS.get("Weight"), "");
-		c.setCellStyle(CellStyles.numberStyle(wb, false, 1));
+		//c.setCellStyle(CellStyles.numberStyle(wb, false, 1));
 		return c;
 	}
 
-	
+	/*
 	public String ewma5Formula(int rn) {
 		String avg = "AVERAGE(0.25*" + getCol("Weight") + (rn-4) + ",";
 		avg += "0.5*" + getCol("Weight") + (rn-3) + ",";
@@ -280,31 +360,60 @@ public class Settings {
 		return avg;
 	}
 	
+	public String ewmaFormula(int rn, int x) {
+		return "IF(" + getCol("Weight") + (rn+1) + "=\"\",NA()," + (x == 5 ? ewma5Formula(rn) : ewma7Formula(rn)) + ")";
+	}
+	*/
 	public Cell makeEWMACell(Row r, int n) {
 		Cell c = CellBuilder.makeCell(r, COLS.get("EWMA" + n), "");
 		int rn = r.getRowNum();
-		List<String> borders = new ArrayList<String>();
-		if(n == 5 || (n == 7 && rn > 5)) {
-			borders.add("l");
-		}
-		
-		if(n == 7) {
-			borders.add("r");
-		}
-		
-		if(n == rn) {
-			borders.add("b");
-		}
-		String avg = n == 5 ? ewma5Formula(rn) : ewma7Formula(rn);
+		Set<String> borders = addBorders("ewma" + n, rn);
 		if(rn <= n) { 
-			c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
+			//c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
 		}
 		else {
-			String f = "IF(" + getCol("Weight") + (r.getRowNum()+1) + "=\"\",NA()," + avg + ")";
-			c.setCellFormula(f);
-			c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
+			c.setCellFormula(Formulas.ewmaFormula(rn, n));
+			//c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
 		}
 		
+		return c;
+	}
+	
+	public Set<String> addBorders(String which, int rn) {
+		System.out.println(which);
+		Set<String> bs = new HashSet<String>();
+		if(rn % 7 == 0)
+			bs.add("b");
+		
+		if(which.contains("ewma")) {
+			int n = Integer.parseInt(which.substring(which.length()-1));
+			System.out.println("ewma");
+			System.out.println(n);
+			if(n == 5 || rn > 5)
+				bs.add("l");
+			
+			if(n == 7)
+				bs.add("r");
+			
+			if(rn == n && !bs.contains("b"))
+				bs.add("b-thin");
+		}
+		else if(which.equals("Smoothed") || which.equals("Forecast") || which.equals("Residual")) {
+			if(rn == 5) {
+				bs.add("b");
+			}
+			
+			if(which.equals("Residual")) {
+				bs.add("r");
+			}
+		}
+		return bs;
+	}
+	
+	public Cell makeSFRCell(Row r, String which) {
+		Cell c = CellBuilder.makeCell(r, COLS.get(which), "");
+		int rn = r.getRowNum();
+		//List<String> borders = addBorders(which);
 		return c;
 	}
 	
@@ -316,14 +425,14 @@ public class Settings {
 			borders.add("b");
 		
 		if(rn <= 5) { 
-			c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
+			//c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
 		}
 		else {
 			String f = "(" + getConst("Alpha") + "*" + getCol("Weight") + rn + ")";
 			f += "+((1-" + getConst("Alpha") + ")*" + getCol("Forecast") + rn + ")";
-			String f2 = "IF(" + getCol("Weight") + (r.getRowNum()+1) + "=\"\",NA()," + f + ")";
+			String f2 = "IF(" + getCol("Weight") + (rn+1) + "=\"\",NA()," + f + ")";
 			c.setCellFormula(f2);
-			c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
+			//c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
 		}
 		
 		return c;
@@ -331,6 +440,17 @@ public class Settings {
 	
 	public Cell makeForecastCell(Row r) {
 		Cell c = CellBuilder.makeCell(r, COLS.get("Forecast"), "");
+		int rn = r.getRowNum();
+		List<String> borders = new ArrayList<String>();
+		if(rn == 5)
+			borders.add("b");
+		
+		if(rn <= 5) {
+			//c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
+		}
+		else {
+			
+		}
 		return c;
 	}
 	
