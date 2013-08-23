@@ -125,8 +125,8 @@ public class Settings {
 			makeEWMACell(r, 5);
 			makeEWMACell(r, 7);
 			makeSmoothedCell(r);
-			/*
 			makeForecastCell(r);
+			/*
 			makeResidualCell(r);
 			makeLostWeekCell(r);
 			makeTrendCell(r);
@@ -227,7 +227,7 @@ public class Settings {
 	}
 	
 	public Cell makeDOWCell(Row r, LocalDate d) {
-		String formula = "TEXT(" + dateCol() + (r.getRowNum()+1) + ", \"ddd\")";
+		String formula = "TEXT(" + getCol("Date") + (r.getRowNum()+1) + ", \"ddd\")";
 		return CellBuilder.makeFormulaCell(r, COLS.get("DOW"), formula);
 	}
 	
@@ -261,22 +261,22 @@ public class Settings {
 
 	
 	public String ewma5Formula(int rn) {
-		String avg = "AVERAGE(0.25*" + weightCol() + (rn-4) + ",";
-		avg += "0.5*" + weightCol() + (rn-3) + ",";
-		avg += weightCol() + (rn-2) + ",";
-		avg += "1.25*" + weightCol() + (rn-1) + ",";
-		avg += "2*" + weightCol() + rn + ")";
+		String avg = "AVERAGE(0.25*" + getCol("Weight") + (rn-4) + ",";
+		avg += "0.5*" + getCol("Weight") + (rn-3) + ",";
+		avg += getCol("Weight") + (rn-2) + ",";
+		avg += "1.25*" + getCol("Weight") + (rn-1) + ",";
+		avg += "2*" + getCol("Weight") + rn + ")";
 		return avg;
 	}
 	
 	public String ewma7Formula(int rn) {
-		String avg = "AVERAGE(0.25*" + weightCol() + (rn-6) + ",";
-		avg += "0.5*" + weightCol() + (rn-5) + ",";
-		avg += "0.75*" + weightCol() + (rn-4) + ",";
-		avg += weightCol() + (rn-3) + ",";
-		avg += "1.25*" + weightCol() + (rn-2) + ",";
-		avg += "1.5*" + weightCol() + (rn-2) + ",";
-		avg += "1.75*" + weightCol() + rn + ")";
+		String avg = "AVERAGE(0.25*" + getCol("Weight") + (rn-6) + ",";
+		avg += "0.5*" + getCol("Weight") + (rn-5) + ",";
+		avg += "0.75*" + getCol("Weight") + (rn-4) + ",";
+		avg += getCol("Weight") + (rn-3) + ",";
+		avg += "1.25*" + getCol("Weight") + (rn-2) + ",";
+		avg += "1.5*" + getCol("Weight") + (rn-2) + ",";
+		avg += "1.75*" + getCol("Weight") + rn + ")";
 		return avg;
 	}
 	
@@ -300,7 +300,7 @@ public class Settings {
 			c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
 		}
 		else {
-			String f = "IF(" + weightCol() + (r.getRowNum()+1) + "=\"\",NA()," + avg + ")";
+			String f = "IF(" + getCol("Weight") + (r.getRowNum()+1) + "=\"\",NA()," + avg + ")";
 			c.setCellFormula(f);
 			c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
 		}
@@ -319,9 +319,9 @@ public class Settings {
 			c.setCellStyle(CellStyles.grayFillBorderStyle(wb, borders));
 		}
 		else {
-			String f = "(" + alphaCol() + ROWS.get("Constants") + "*" + weightCol() + rn + ")";
-			f += "+((1-" + alphaCol() + ROWS.get("Constants") + ")*" + forecastCol() + rn + ")";
-			String f2 = "IF(" + weightCol() + (r.getRowNum()+1) + "=\"\",NA()," + f + ")";
+			String f = "(" + getConst("Alpha") + "*" + getCol("Weight") + rn + ")";
+			f += "+((1-" + getConst("Alpha") + ")*" + getCol("Forecast") + rn + ")";
+			String f2 = "IF(" + getCol("Weight") + (r.getRowNum()+1) + "=\"\",NA()," + f + ")";
 			c.setCellFormula(f2);
 			c.setCellStyle(CellStyles.numberStyle(wb, true, 4));
 		}
@@ -329,36 +329,17 @@ public class Settings {
 		return c;
 	}
 	
-	public static String dowCol() {
-		return "$" + Excel.rowToLetter(COLS.get("DOW"));
+	public Cell makeForecastCell(Row r) {
+		Cell c = CellBuilder.makeCell(r, COLS.get("Forecast"), "");
+		return c;
 	}
 	
-	public static String dateCol() {
-		return "$" + Excel.rowToLetter(COLS.get("Date"));
+	public static String getCol(String c) {
+		return "$" + Excel.rowToLetter(COLS.get(c));
 	}
 	
-	public static String weightCol() {
-		return "$" + Excel.rowToLetter(COLS.get("Weight"));
-	}
-	
-	public static String ewma5Col() {
-		return "$" + Excel.rowToLetter(COLS.get("EWMA5"));
-	}
-	
-	public static String ewma7Col() {
-		return "$" + Excel.rowToLetter(COLS.get("EWMA7"));
-	}
-	
-	public static String smoothedCol() {
-		return "$" + Excel.rowToLetter(COLS.get("Smoothed"));
-	}
-	
-	public static String forecastCol() {
-		return "$" + Excel.rowToLetter(COLS.get("Forecast"));
-	}
-	
-	public static String alphaCol() {
-		return "$" + Excel.rowToLetter(COLS.get("Alpha"));
+	public static String getConst(String c) {
+		return "$" + Excel.rowToLetter(COLS.get(c)) + ROWS.get("Constants");
 	}
 	
 	/*
