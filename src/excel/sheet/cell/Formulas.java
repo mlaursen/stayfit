@@ -4,31 +4,45 @@ import excel.CellBuilder;
 import excel.sheet.Settings;
 
 public class Formulas {
+	
+	/**
+	 * Creates an excel IF formula
+	 * @param b	Boolean expression
+	 * @param t	Then case
+	 * @param e	Else case
+	 * @return	Complete excel IF formula
+	 */
+	private static String ifFormula(String b, String t, String e) {
+		return "IF(" + b + "," + t + "," + e + ")";
+	}
+	
+	private static String avgFormula(String[] args) {
+		StringBuilder a = new StringBuilder("AVERAGE(");
+		int l = args.length;
+		for(int i = 0; i < l; i++) {
+			a.append(args[i]);
+			if(i+1 != l)
+				a.append(",");
+		}
+		return a + ")";
+	}
+	
+	public static String NA() { return "NA()"; }
 
 	public static String ewmaFormula(int rn, int x) {
-		return "IF(" + Settings.getCol("Weight") + (rn+1) + "=\"\",NA()," + (x == 5 ? ewma5Formula(rn) : ewma7Formula(rn)) + ")";
-	}
-	
-	private static String ewma7Formula(int rn) {
 		String w = Settings.getCol("Weight");
-		String avg = "AVERAGE(0.25*" + w + (rn-6) + ",";
-		avg += "0.5*" + w + (rn-5) + ",";
-		avg += "0.75*" + w + (rn-4) + ",";
-		avg += w + (rn-3) + ",";
-		avg += "1.25*" + w + (rn-2) + ",";
-		avg += "1.5*" + w + (rn-2) + ",";
-		avg += "1.75*" + w + rn + ")";
-		return avg;
-	}
-	
-	private static String ewma5Formula(int rn) {
-		String w = Settings.getCol("Weight");
-		String avg = "AVERAGE(0.25*" + w + (rn-4) + ",";
-		avg += "0.5*" + w + (rn-3) + ",";
-		avg += w + (rn-2) + ",";
-		avg += "1.25*" + w + (rn-1) + ",";
-		avg += "2*" + w + rn + ")";
-		return avg;
+		String b = w + (rn+1) + "=\"\"";
+		double[] ms;
+		if(x == 5)
+			ms = new double[]{.25, .5, 1, 1.25, 2};
+		else
+			ms = new double[]{.25, .5, .75, 1, 1.25, 1.5, 1.75};
+		String[] as = new String[x];
+		for(int i = 0, j = x; i < x; i++, j--) {
+			as[i] = ms[i] + "*" + w + (rn-j);
+		}
+		String e = avgFormula(as);
+		return ifFormula(b, NA(), e);
 	}
 	
 	public static String dowFormula(int rn) {
