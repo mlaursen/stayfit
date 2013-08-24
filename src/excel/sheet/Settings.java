@@ -1,10 +1,8 @@
 package excel.sheet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,12 +11,18 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
-import user.User;
 import excel.CellBuilder;
 import excel.CellStyles;
 import excel.Excel;
 import excel.sheet.cell.Formulas;
 
+/**
+ * Returns a Settings sheet.
+ * This holds all teh daily information, as well as constants
+ * 
+ * @author Mikkel Laursen
+ *
+ */
 public class Settings {
 	
 	public static final short DOW, DATE, EWMA5, EWMA7, WEIGHT, SMOOTHED, FORECAST, RESIDUAL, LOST_WEEK;
@@ -276,28 +280,6 @@ public class Settings {
 	}
 	
 	
-	public static User extractSettings(Workbook wb, int row) {
-		Sheet s = wb.getSheet("Settings");
-		
-		Row constantsRow = s.getRow(Excel.DATA_START);
-		row = row / 6 + 1;
-		
-		/*
-		Row updatingRow = s.getRow(row);
-		double weight = updatingRow.getCell(WEIGHT).getNumericCellValue();
-		double height = constantsRow.getCell(HEIGHT).getNumericCellValue();
-		double age = constantsRow.getCell(AGE).getNumericCellValue();
-		UnitSystem units = UnitSystem.parseRichTextString(constantsRow.getCell(UNIT_SYSTEM).getRichStringCellValue());
-		ActivityMultiplier activity = ActivityMultiplier.parseRichTextString(constantsRow.getCell(ACTIVITY_MULTIPLIER).getRichStringCellValue());
-		CalorieSplit calSplit = CalorieSplit.parseRichTextString(updatingRow.getCell(CALORIE_SPLIT).getRichStringCellValue());
-		DayType type = DayType.parseRichTextString(updatingRow.getCell(DAY_TYPE).getRichStringCellValue());
-		CarbFatSplit carbFatSplit = CarbFatSplit.parseRichTextString(updatingRow.getCell(CARB_FAT_SPLIT).getRichStringCellValue());
-		Formula f = Formula.parseRichTextString(constantsRow.getCell(FORMULA).getRichStringCellValue());
-		Sex sex = Sex.parseRichTextString(constantsRow.getCell(SEX).getRichStringCellValue());
-		*/
-		return null; //new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
-	}
-	
 	public Cell createFormulaCell(Row r, short n, String f) {
 		return createCell(CellBuilder.makeFormulaCell(r, n, f), n, r.getRowNum());
 	}
@@ -393,4 +375,34 @@ public class Settings {
 	public static String getConst(short c) {
 		return "$" + Excel.rowToLetter(c) + "$" + CONSTANTS_ROW;
 	}
+	
+	
+	
+	
+	
+	
+	
+
+	/*
+	public static User extractSettings(Workbook wb, int row) {
+		Sheet s = wb.getSheet("Settings");
+		
+		Row constantsRow = s.getRow(Excel.DATA_START);
+		row = row / 6 + 1;
+		
+		/*
+		Row updatingRow = s.getRow(row);
+		double weight = updatingRow.getCell(WEIGHT).getNumericCellValue();
+		double height = constantsRow.getCell(HEIGHT).getNumericCellValue();
+		double age = constantsRow.getCell(AGE).getNumericCellValue();
+		UnitSystem units = UnitSystem.parseRichTextString(constantsRow.getCell(UNIT_SYSTEM).getRichStringCellValue());
+		ActivityMultiplier activity = ActivityMultiplier.parseRichTextString(constantsRow.getCell(ACTIVITY_MULTIPLIER).getRichStringCellValue());
+		CalorieSplit calSplit = CalorieSplit.parseRichTextString(updatingRow.getCell(CALORIE_SPLIT).getRichStringCellValue());
+		DayType type = DayType.parseRichTextString(updatingRow.getCell(DAY_TYPE).getRichStringCellValue());
+		CarbFatSplit carbFatSplit = CarbFatSplit.parseRichTextString(updatingRow.getCell(CARB_FAT_SPLIT).getRichStringCellValue());
+		Formula f = Formula.parseRichTextString(constantsRow.getCell(FORMULA).getRichStringCellValue());
+		Sex sex = Sex.parseRichTextString(constantsRow.getCell(SEX).getRichStringCellValue());
+		*/
+	//	return null; //new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
+	//}
 }

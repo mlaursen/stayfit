@@ -2,6 +2,12 @@ package excel.sheet.cell;
 
 import excel.sheet.Settings;
 
+/**
+ * Class for generating formulas to put in formula cells
+ * 
+ * @author Mikkel Laursen
+ *
+ */
 public class Formulas {
 	
 	/**
@@ -84,6 +90,11 @@ public class Formulas {
 		return textFormula(Settings.getCol(Settings.DATE) + "" + (rn+1), "ddd");
 	}
 	
+	/**
+	 * Creates the formula for a "smoothed" estimation of the weight.
+	 * @param rn	Row number
+	 * @return	Formula as a string
+	 */
 	public static String smoothed(int rn) {
 		String a = Settings.getConst(Settings.ALPHA);
 		String w = Settings.getCol(Settings.WEIGHT) + (rn+1);

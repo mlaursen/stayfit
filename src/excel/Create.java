@@ -4,14 +4,10 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
-
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import excel.sheet.Intake;
 import excel.sheet.Settings;
-import excel.sheet.StoredData;
 
 public class Create {
 	

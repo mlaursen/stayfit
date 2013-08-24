@@ -3,24 +3,14 @@ package excel.sheet;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.poi.ss.formula.eval.StringEval;
-import org.apache.poi.ss.formula.eval.ValueEval;
-import org.apache.poi.ss.formula.functions.Vlookup;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellReference;
 
-import user.User;
-
-import enums.ActivityMultiplier;
-import enums.CarbFatSplit;
 import enums.Macro;
-import enums.UnitSystem;
 import excel.CellBuilder;
 import excel.Excel;
 
