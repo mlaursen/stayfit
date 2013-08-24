@@ -6,14 +6,28 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class CellBuilder {
 	
+	/**
+	 * Creates a cell.
+	 * @param r		Row to create cell on
+	 * @param index	Cell index (column letter as number)
+	 * @param o		Object to put into the cell (toString called)
+	 * @return
+	 */
 	public static Cell makeCell(Row r, int index, Object o) {
 		Cell c = r.createCell(index);
 		c.setCellValue(o.toString());
 		return c;
 	}
 	
-	public static Cell makeFormulaCell(Row r, int index, String f) {
-		Cell c = r.createCell(index);
+	/**
+	 * Create a cell that has a formula
+	 * @param r	Row to create cell
+	 * @param i	Index (column letter as number)
+	 * @param f	String representation of the formula
+	 * @return	a Cell
+	 */
+	public static Cell makeFormulaCell(Row r, int i, String f) {
+		Cell c = r.createCell(i);
 		c.setCellFormula(f);
 		return c;
 	}
