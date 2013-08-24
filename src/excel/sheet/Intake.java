@@ -18,9 +18,7 @@ import org.apache.poi.ss.util.CellReference;
 import user.User;
 
 import enums.ActivityMultiplier;
-import enums.CalorieSplit;
 import enums.CarbFatSplit;
-import enums.DayType;
 import enums.Macro;
 import enums.UnitSystem;
 import excel.CellBuilder;

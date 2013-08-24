@@ -42,6 +42,7 @@ public enum CarbFatSplit {
 	public double getWorkoutFatMultiplier() { return this.workoutFat; }
 	public double getWorkoutCarbMultiplier() { return this.workoutCarb; }
 	
+	/*
 	public double getCarbMultiplier(DayType dt) {
 		if(dt.equals(DayType.REST))
 			return this.restCarb;
@@ -55,7 +56,7 @@ public enum CarbFatSplit {
 		else
 			return this.workoutFat;
 	}
-	
+	*/
 	public static CarbFatSplit parseRichTextString(RichTextString rts) { return parseString(rts.getString()); }
 	public static CarbFatSplit parseString(String s) {
 		for(CarbFatSplit split : CarbFatSplit.values())

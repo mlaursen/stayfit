@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import user.User;
 
 import enums.ActivityMultiplier;
-import enums.CalorieSplit;
 import enums.CarbFatSplit;
 import excel.CellBuilder;
 import excel.Data;
@@ -40,14 +39,14 @@ public class StoredData {
 		//CellBuilder.makeTitleCell(wb, r, WORKOUT_CAL, "Workout Calorie Multiplier: ");
 		//CellBuilder.makeTitleCell(wb, r, ACTIVITY_MULT, "Activity Multiplier: ");
 		
-		int numRows = Math.max(CarbFatSplit.values().length, Math.max(ActivityMultiplier.values().length, CalorieSplit.values().length));
-		for(int i = 1; i <= numRows; i++)
-			s.createRow(i);
+		//int numRows = Math.max(CarbFatSplit.values().length, Math.max(ActivityMultiplier.values().length, CalorieSplit.values().length));
+		//for(int i = 1; i <= numRows; i++)
+		//	s.createRow(i);
 		
-		for(int i = 0; i < CalorieSplit.values().length; i++) {
+		//for(int i = 0; i < CalorieSplit.values().length; i++) {
 			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), REST_CAL, CalorieSplit.values()[i].getRest());
 			//CellBuilder.makeNumberCell(wb, s.getRow(i+1), WORKOUT_CAL, CalorieSplit.values()[i].getWorkout());
-		}
+		//}
 		
 		for(int i = 0; i < CarbFatSplit.values().length; i++) {
 		//	CellBuilder.makeNumberCell(wb, s.getRow(i+1), FAT_REST, CarbFatSplit.values()[i].getRestFatMultiplier());
