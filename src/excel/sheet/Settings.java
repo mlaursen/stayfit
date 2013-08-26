@@ -179,20 +179,40 @@ public class Settings {
 			createCell(r, WEIGHT, "");
 			createCell(r, EWMA5, "");
 			createCell(r, EWMA7, "");
-			createCell(r, SMOOTHED, "");
-			createCell(r, FORECAST, "");
-			createCell(r, RESIDUAL, "");
-			createCell(r, LOST_WEEK, "");
-			createCell(r, TREND, "");
-			createCell(r, SLOPE, "");
+			if(i > 5) {
+				createFormulaCell(r, SMOOTHED, Formulas.smoothed(i));
+				createFormulaCell(r, FORECAST, Formulas.forecast(i));
+				createFormulaCell(r, RESIDUAL, Formulas.residual(i));
+			}
+			else {
+				createCell(r, SMOOTHED, "");
+				createCell(r, FORECAST, "");
+				createCell(r, RESIDUAL, "");
+			}
+			
+			if(i > 12) {
+				createFormulaCell(r, LOST_WEEK, Formulas.lostPerWeek(i));
+			}
+			else {
+				createCell(r, LOST_WEEK, "");
+			}
+			
+			createFormulaCell(r, TREND, Formulas.trend(i));
+			if(i > Excel.DATA_START) {
+				createFormulaCell(r, SLOPE, Formulas.slope(i));
+			}
+			else {
+				createCell(r, SLOPE, "");
+			}
+			
 			createCell(r, CFSPLIT, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
 			createCell(r, CHANGE, 0);
-			createCell(r, BMR, "");
-			createCell(r, TDEE, "");
-			createCell(r, BMR_, "");
-			createCell(r, CALORIES, "");
-			createCell(r, PMULT, "");
-			createCell(r, PROTEIN, "");
+			createFormulaCell(r, BMR, Formulas.bmr(i));
+			createFormulaCell(r, TDEE, Formulas.tdee(i));
+			createCell(r, BMR_, "Y");
+			createFormulaCell(r, CALORIES, Formulas.calcCals(i));
+			createCell(r, PMULT, 1);
+			createFormulaCell(r, PROTEIN, Formulas.calcProtein(i));
 		
 		}
 		
@@ -211,6 +231,7 @@ public class Settings {
 		createCell(cVals, GENDER, Gender.MALE.getGenderName());
 		createCell(cVals, ALPHA, 0.3);
 		
+		Excel.createDropDown(s, new String[]{"Y", "N" }, BMR_);
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTANTS_ROW, ACTIVITY);
 		Excel.createDropDown(s, UnitSystem.UNIT_SYSTEM, CONSTANTS_ROW, UNITS);
@@ -266,34 +287,8 @@ public class Settings {
 				if(rn > x)
 					c = CellBuilder.createFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
 			}
-			else if(n == LOST_WEEK && rn > 12) {
-				c = CellBuilder.createFormulaCell(r, n, Formulas.lostPerWeek(rn));
-			}
-			else if(n == TREND) {
-				c = CellBuilder.createFormulaCell(r, n, Formulas.trend(rn));
-			}
-			else if(n == SLOPE && rn > Excel.DATA_START) {
-				c = CellBuilder.createFormulaCell(r, n, Formulas.slope(rn));
-			}
 			else if(n == CHANGE && ((rn-1) % 7 != 0)) {
 				c = CellBuilder.createPrevCell(r, n);
-			}
-			else if(n == BMR) {
-				c = CellBuilder.createFormulaCell(r, n, Formulas.bmr(rn));
-			}
-			else if(n == TDEE) {
-				c = CellBuilder.createFormulaCell(r, n, Formulas.tdee(rn));
-			}
-			else if(rn > 5) {	// grayed otherwise with empty string as value
-				if(n == SMOOTHED) {
-					c = CellBuilder.createFormulaCell(r, n, Formulas.smoothed(rn));
-				}
-				else if(n == FORECAST) {
-					c = CellBuilder.createFormulaCell(r, n, Formulas.forecast(rn));
-				}
-				else if(n == RESIDUAL) {
-					c = CellBuilder.createFormulaCell(r, n, Formulas.residual(rn));
-				}
 			}
 		}
 		return createCell(c, n, rn);

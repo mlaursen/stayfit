@@ -270,4 +270,15 @@ public class Formulas {
 		String end = Settings.getCol(Settings.ACTIVITY_VAL) + "$" + Settings.EXTREMELY_ACTIVE;
 		return Settings.getCol(Settings.BMR) + (rn+1) + "*" + vlookup(a, start, end, 2, false);
 	}
+	
+	public static String calcCals(int rn) {
+		String b = Settings.getCol(Settings.BMR_) + (rn+1) + "=\"Y\"";
+		String t = Settings.getCol(Settings.BMR) + (rn+1);
+		String e = Settings.getCol(Settings.TDEE) + (rn+1);
+		return sum(ifFormula(b, t, e), Settings.getCol(Settings.CHANGE) + (rn+1));
+	}
+	
+	public static String calcProtein(int rn) {
+		return product(Settings.getCol(Settings.WEIGHT) + (rn+1), Settings.getCol(Settings.PMULT) + (rn+1));
+	}
 }
