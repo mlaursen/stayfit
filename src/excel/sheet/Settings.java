@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
 import enums.ActivityMultiplier;
+import enums.Gender;
+import enums.UnitSystem;
 import excel.CellBuilder;
 import excel.CellStyles;
 import excel.Excel;
@@ -26,6 +28,8 @@ import excel.sheet.cell.Formulas;
  */
 public class Settings {
 	
+	public static final int SIX_DIGIT_WIDTH = 28*80;
+	public static final int FIVE_DIGIT_WIDTH = 28*60;
 	public static final short DOW, DATE, EWMA5, EWMA7, WEIGHT, SMOOTHED, FORECAST, RESIDUAL, LOST_WEEK;
 	public static final short TREND, SLOPE, CFSPLIT, CHANGE, BMR, TDEE, BMR_, CALORIES, PMULT, PROTEIN;
 	
@@ -110,7 +114,8 @@ public class Settings {
 		TITLES.add(CARBS);
 		TITLES.add(FAT);
 		
-		NUMBER1.add(CHANGE);
+		NUMBER.add(CHANGE);
+		NUMBER2.add(HEIGHT);
 		NUMBER1.add(WEIGHT);
 		NUMBER2.add(EWMA5);
 		NUMBER2.add(EWMA7);
@@ -202,7 +207,7 @@ public class Settings {
 			createCell(r, PROTEIN, "");
 		
 		}
-		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
+		
 		Row cNames = s.getRow(CONSTANTS_ROW_NAMES);
 		Row cVals = s.getRow(CONSTANTS_ROW);
 		createCell(cNames, BIRTHDAY, "Birthday");
@@ -211,12 +216,18 @@ public class Settings {
 		createCell(cNames, UNITS, "Units");
 		createCell(cNames, GENDER, "Gender");
 		createCell(cNames, ALPHA, "alpha");
-		createCell(cVals, BIRTHDAY, "");
+		createCell(cVals, BIRTHDAY, "1/1/1991");
 		createCell(cVals, HEIGHT, "");
-		createCell(cVals, ACTIVITY, "");	// need to change to a dropdown
-		createCell(cVals, UNITS, "");		// need to change to a dropdown
-		createCell(cVals, GENDER, "");		// need to change to a dropdown
+		createCell(cVals, ACTIVITY, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
+		createCell(cVals, UNITS, UnitSystem.IMPERIAL);		// need to change to a dropdown
+		createCell(cVals, GENDER, Gender.MALE.getGenderName());		// need to change to a dropdown
 		createCell(cVals, ALPHA, "0.3");
+		
+		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
+		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTANTS_ROW, ACTIVITY);
+		Excel.createDropDown(s, UnitSystem.UNIT_SYSTEM, CONSTANTS_ROW, UNITS);
+		Excel.createDropDown(s, Gender.GENDER, CONSTANTS_ROW, GENDER);
+		
 		
 		Row r = s.getRow(SEDENTARY);
 		r.createCell(ACTIVITY_VAL);
@@ -282,6 +293,11 @@ public class Settings {
 		*/
 		
 		Excel.autosizeCols(s);
+		s.setColumnWidth(BMR, SIX_DIGIT_WIDTH);
+		s.setColumnWidth(TDEE, SIX_DIGIT_WIDTH);
+		s.setColumnWidth(CALORIES, SIX_DIGIT_WIDTH);
+		s.setColumnWidth(TREND, FIVE_DIGIT_WIDTH);
+		s.setColumnWidth(SLOPE, FIVE_DIGIT_WIDTH);
 		return s;
 	}
 	
@@ -343,8 +359,8 @@ public class Settings {
 	
 	public Set<Short> addStyles(short n, int rn) {
 		Set<Short> styles = new HashSet<Short>();
-		//if(NUMBER.contains(n))
-		//	styles.add(CellStyles.NUMBER);
+		if(NUMBER.contains(n))
+			styles.add(CellStyles.NUMBER);
 		
 		if(NUMBER1.contains(n))
 			styles.add(CellStyles.NUMBER_1);

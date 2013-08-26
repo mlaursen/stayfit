@@ -209,39 +209,6 @@ public class Formulas {
 	
 	/**
 	 * Formula for BMR.. oh god.
-	 * =IF($Y$3="Female"
-	 *    ,IF($X$3="Imperial"
-	 *       ,SUM(655
-	 *           ,PRODUCT(4.35,$C2)
-	 *           ,PRODUCT(4.7,$V$3)
-	 *           ,PRODUCT(-4.7,YEAR(TODAY())-YEAR($U$3)))
-	 *       ,SUM(655
-	 *           ,PRODUCT(9.6,$C2)
-	 *           ,PRODUCT(1.8,$V$3)
-	 *           ,PRODUCT(-4.7,YEAR(TODAY())-YEAR($U$3))))
-	 *    ,IF($X$3="Imperial"
-	 *        ,SUM(66,PRODUCT(6.23,$C2)
-	 *            ,PRODUCT(12.7,$V$3)
-	 *            ,PRODUCT(-6.8,YEAR(TODAY())-YEAR($U$3)))
-	 *        ,SUM(66,PRODUCT(13.7,$C2)
-	 *            ,PRODUCT(5,$V$3)
-	 *            ,PRODUCT(-6.8,YEAR(TODAY())-YEAR($U$3)))))
-	 * 
-=IF($Y$3="Female"
-   ,655+IF($X$3="Imperial"
-      ,SUM(PRODUCT(4.35,$C2)
-          ,PRODUCT(4.7,$V$3)
-          ,PRODUCT(-4.7,YEAR(TODAY())-YEAR($U$3)))
-      ,SUM(PRODUCT(9.6,$C2)
-          ,PRODUCT(1.8,$V$3)
-          ,PRODUCT(-4.7,YEAR(TODAY())-YEAR($U$3))))
-   ,66+IF($X$3="Imperial"
-      ,SUM(PRODUCT(6.23,$C2)
-          ,PRODUCT(12.7,$V$3)
-          ,PRODUCT(-6.8,YEAR(TODAY())-YEAR($U$3)))
-      ,SUM(PRODUCT(13.7,$C2)
-          ,PRODUCT(5,$V$3)
-          ,PRODUCT(-6.8,YEAR(TODAY())-YEAR($U$3)))))
 	 * @param rn
 	 * @return
 	 */
@@ -267,8 +234,6 @@ public class Formulas {
 		
 		String f = "655+" + ifFormula(u, fi, fm);
 		String m = "66+" + ifFormula(u, mi, mm);
-		//System.out.println("\n" + f);
-		//System.out.println(m);
 		return ifFormula(b, f, m);
 	}
 }

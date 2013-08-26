@@ -91,7 +91,7 @@ public class CellStyles {
 	}
 	
 	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb, int prec) {
-		String format = "0.";
+		String format = "0" + (prec == 0 ? "" : ".");
 		for(int i = 0; i < prec; i++)
 			format += 0;
 		return applyNumberStyle(cs, wb, format);
