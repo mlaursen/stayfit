@@ -149,4 +149,29 @@ public class Formulas {
 		String e = w + (rn+8) + "-" + w + (rn+1);
 		return ifFormula(b, e);
 	}
+	
+	/**
+	 * Creates the trend formula
+	 * @param rn Row number
+	 * @return	 Formula as a string
+	 */
+	public static String trend(int rn) {
+		if(rn == 1)
+			return Settings.getCol(Settings.WEIGHT) + "$2";
+		else {
+			String w = Settings.getCol(Settings.WEIGHT) + (rn+1);
+			String t = Settings.getCol(Settings.TREND) + rn;
+			String b = w + isEmpty();
+			String e = t + "+" + paren(paren(w + "-" + t) + "/10");
+			return ifFormula(b, e);
+		}
+	}
+	
+	public static String slope(int rn) {
+		String w = Settings.getCol(Settings.WEIGHT) + (rn+1);
+		String t = Settings.getCol(Settings.TREND);
+		String b = w + isEmpty();
+		String e = t + (rn+1) + "-" + t + rn;
+		return ifFormula(b, e);
+	}
 }

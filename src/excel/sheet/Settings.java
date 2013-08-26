@@ -303,6 +303,12 @@ public class Settings {
 			else if(n == LOST_WEEK && rn > 12) {
 				c = CellBuilder.makeFormulaCell(r, n, Formulas.lostPerWeek(rn));
 			}
+			else if(n == TREND) {
+				c = CellBuilder.makeFormulaCell(r, n, Formulas.trend(rn));
+			}
+			else if(n == SLOPE && rn > Excel.DATA_START) {
+				c = CellBuilder.makeFormulaCell(r, n, Formulas.slope(rn));
+			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {
 					c = CellBuilder.makeFormulaCell(r, n, Formulas.smoothed(rn));
