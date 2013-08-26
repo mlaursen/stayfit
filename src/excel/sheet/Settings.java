@@ -99,6 +99,7 @@ public class Settings {
 		TITLES_RIGHT_BORDER.add(CALORIES);
 		TITLES_RIGHT_BORDER.add(PMULT);
 		TITLES_RIGHT_BORDER.add(PROTEIN);
+		TITLES_RIGHT_BORDER.add(CONSTANTS);
 		
 		TITLES.addAll(TITLES_RIGHT_BORDER);
 		TITLES.add(DOW);
@@ -219,8 +220,8 @@ public class Settings {
 		createCell(cVals, BIRTHDAY, "1/1/1991");
 		createCell(cVals, HEIGHT, "");
 		createCell(cVals, ACTIVITY, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
-		createCell(cVals, UNITS, UnitSystem.IMPERIAL);		// need to change to a dropdown
-		createCell(cVals, GENDER, Gender.MALE.getGenderName());		// need to change to a dropdown
+		createCell(cVals, UNITS, UnitSystem.IMPERIAL);
+		createCell(cVals, GENDER, Gender.MALE.getGenderName());
 		createCell(cVals, ALPHA, "0.3");
 		
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
@@ -413,6 +414,27 @@ public class Settings {
 		}
 		else if(n == DATE) {
 			styles.add(CellStyles.DATE);
+		}
+		else if(n >= BIRTHDAY && n <= ALPHA) {
+			if(rn == CONSTANTS_ROW_NAMES) {
+				styles.add(CellStyles.BORDER_TOP);
+				styles.add(CellStyles.BORDER_BOTTOM_THIN);
+			}
+			else {
+				styles.add(CellStyles.BORDER_TOP_THIN);
+				styles.add(CellStyles.BORDER_BOTTOM);
+			}
+			
+			if(n == BIRTHDAY) {
+				styles.add(CellStyles.BORDER_LEFT);
+			}
+			else if(n == ALPHA) {
+				styles.add(CellStyles.BORDER_RIGHT);
+			}
+			else {
+				styles.add(CellStyles.BORDER_RIGHT_THIN);
+			}
+					
 		}
 		return styles;
 	}
