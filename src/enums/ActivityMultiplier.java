@@ -4,6 +4,8 @@ import java.util.NoSuchElementException;
 
 import org.apache.poi.ss.usermodel.RichTextString;
 
+import excel.Excel;
+
 public enum ActivityMultiplier {
 	SEDENTARY("Sedentary", 1.2),
 	LIGHTLY_ACTIVE("Lightly Active", 1.375),
@@ -22,6 +24,10 @@ public enum ActivityMultiplier {
 	private ActivityMultiplier(String name, double multiplier) {
 		this.name = name;
 		this.multiplier = multiplier;
+	}
+	
+	public int asRowNum() {
+		return this.ordinal() + Excel.DATA_START;
 	}
 	
 	public String toString() { 

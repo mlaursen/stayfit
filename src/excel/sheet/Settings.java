@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
+import enums.CFSplit;
 import enums.ActivityMultiplier;
 import enums.Gender;
 import enums.UnitSystem;
@@ -129,19 +130,6 @@ public class Settings {
 		NUMBER4.add(SMOOTHED);
 		NUMBER4.add(FORECAST);
 		NUMBER4.add(RESIDUAL);
-		
-
-		/* MIGHT NEED LATER
-		NON_NUMBER_FIELDS.add(DOW);
-		NON_NUMBER_FIELDS.add(DATE);
-		NON_NUMBER_FIELDS.add(CFSPLIT);
-		NON_NUMBER_FIELDS.add(BMR_);
-		NON_NUMBER_FIELDS.add(BIRTHDAY);
-		NON_NUMBER_FIELDS.add(HEIGHT);
-		NON_NUMBER_FIELDS.add(ACTIVITY);
-		NON_NUMBER_FIELDS.add(UNITS);
-		NON_NUMBER_FIELDS.add(GENDER);
-		*/
 	}
 	
 	public static final int DEFAULT_NUM_ROWS = 12*7; // 12 weeks
@@ -228,69 +216,16 @@ public class Settings {
 		Excel.createDropDown(s, UnitSystem.UNIT_SYSTEM, CONSTANTS_ROW, UNITS);
 		Excel.createDropDown(s, Gender.GENDER, CONSTANTS_ROW, GENDER);
 		
-		
-		Row r = s.getRow(SEDENTARY);
-		r.createCell(ACTIVITY_VAL);
-		
-		
-		//System.out.println(Formulas.bmr(4));
-		//Row cNames = s.getRow(ROWS.get("Constants") - 1);
-		//Row cVals = s.getRow(ROWS.get("Constant Values") - 1);
-		//createCell(cNames, "Birthday");
-		/*
-		 * just commented this 8/23
-		
-		Row r = s.getRow(ROWS.get("Split Table"));
-		createCell(r, "Split");
-		createCell(r, "Carbs");
-		createCell(r, "Fat");
-		
-		r = s.getRow(ROWS.get("Constants"));
-		CellBuilder.makeCell(r, COLS.get("Birthday"), "Birthday");
-		CellBuilder.makeCell(r, COLS.get("Height"), "Height");
-		CellBuilder.makeCell(r, COLS.get("Activity"), "Activity Multiplier");
-		CellBuilder.makeCell(r, COLS.get("Units"), "Units");
-		CellBuilder.makeCell(r, COLS.get("Gender"), "Gender");
-		CellBuilder.makeCell(r, COLS.get("Alpha"), "alpha");
-		*/
-		//makeDateCell(r, COLS.get("Birthday"));
-		//CellBuilder.makeNumberCell(wb, r, COLS.get("Height"));
-		//Excel.createDropDown(s, enums.ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTS, CONSTS, COLS.get("Activity"), COLS.get("Activity"));
-		
-		/*
-		old comment
-		
-		Calendar c = Calendar.getInstance();
-		Date d = new Date();
-		for(int i = Excel.DATA_START; i <= DEFAULT_NUM_ROWS; i++) {
-			Row r = s.createRow(i);
-			makeDateCell(wb, r, DATE, d);
-			makeWeightCell(wb, r);
-			makeDayTypeCell(r);
-			makeCalorieSplitCell(r);
-			makeCarbFatSplitCell(r);
-			c.setTime(d);
-			c.add(Calendar.DATE, 1);
-			d = c.getTime();
+		for(ActivityMultiplier a : ActivityMultiplier.values()) {
+			Row r = s.getRow(a.asRowNum());
+			createCell(r, ACTIVITIES, a.getActivityMultiplierName());
+			createCell(r, ACTIVITY_VAL, a.getActivityMultiplier());
 		}
 		
-		Row r = s.getRow(Excel.DATA_START);
-		CellBuilder.makeNumberCell(wb, r, HEIGHT, DEFAULT_HEIGHT);
-		CellBuilder.makeNumberCell(wb, r, AGE, DEFAULT_AGE);
-		makeUnitSystemCell(r);
-		makeActivityMultiplierCell(r);
-		makeFormulaCell(r);
-		makeGenderCell(r);
-		
-		// Create drop down boxes
-		Excel.createDropDown(s, DayType.DAY_TYPES, DAY_TYPE);
-		Excel.createDropDown(s, CalorieSplit.CALORIE_SPLIT, CALORIE_SPLIT);
-		Excel.createDropDown(s, CarbFatSplit.CARB_FAT_SPLIT, CARB_FAT_SPLIT);
-		Excel.createDropDownBox(s, Formula.FORMULA, FORMULA);
-		Excel.createDropDownBox(s, UnitSystem.UNIT_SYSTEM, UNIT_SYSTEM);
-		Excel.createDropDownBox(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, ACTIVITY_MULTIPLIER);
-		Excel.createDropDownBox(s, Sex.SEX, SEX);
-		*/
+		for(CFSplit cfs : CFSplit.values()) {
+			Row r = s.getRow(csf.asRowNum());
+			
+		}
 		
 		Excel.autosizeCols(s);
 		s.setColumnWidth(BMR, PIXELS_8);
