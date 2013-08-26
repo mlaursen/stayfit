@@ -12,23 +12,30 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class CellStyles {
 	public static final String DATE_FORMAT = "dd-mmm";
 	public static final String NUMBER_FORMAT = "0.00";
-	public static final short BORDER_LEFT = 0;
-	public static final short BORDER_RIGHT = 1;
-	public static final short BORDER_BOTTOM = 2;
-	public static final short BORDER_TOP = 3;
-	public static final short BORDER_ALL = 4;
-	public static final short BORDER_LEFT_THIN = 5;
-	public static final short BORDER_RIGHT_THIN = 6;
-	public static final short BORDER_BOTTOM_THIN = 7;
-	public static final short BORDER_TOP_THIN = 8;
-	public static final short BORDER_ALL_THIN = 9;
-	public static final short BOLD = 10;
-	public static final short GRAY_FILL = 11;
-	public static final short NUMBER = 12;
-	public static final short NUMBER_1 = 13;
-	public static final short NUMBER_2 = 14;
-	public static final short NUMBER_4 = 15;
-	public static final short DATE = 16;
+	public static final short BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, BORDER_ALL;
+	public static final short BORDER_LEFT_THIN, BORDER_RIGHT_THIN, BORDER_TOP_THIN, BORDER_BOTTOM_THIN, BORDER_ALL_THIN;
+	public static final short BOLD, GRAY_FILL, NUMBER, NUMBER_1, NUMBER_2, NUMBER_4, DATE;
+	static {
+		short i = 0;
+		BORDER_LEFT = i++;
+		BORDER_RIGHT = i++;
+		BORDER_TOP = i++;
+		BORDER_BOTTOM = i++;
+		BORDER_ALL = i++;
+		BORDER_LEFT_THIN = i++;
+		BORDER_RIGHT_THIN = i++;
+		BORDER_TOP_THIN = i++;
+		BORDER_BOTTOM_THIN = i++;
+		BORDER_ALL_THIN = i++;
+		BOLD = i++;
+		GRAY_FILL = i++;
+		NUMBER = i++;
+		NUMBER_1 = i++;
+		NUMBER_2 = i++;
+		NUMBER_4 = i++;
+		DATE = i++;
+		
+	}
 
 	public static Cell applyStyles(Set<Short> styles, Cell c) {
 		Workbook wb = c.getSheet().getWorkbook();
