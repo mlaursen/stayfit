@@ -40,6 +40,9 @@ public class CellBuilder {
 		return c;
 	}
 	
+	public static Cell createPrevCell(Row r, int i) {
+		return createFormulaCell(r, i, "$" + Excel.rowToLetter(i) + r.getRowNum());
+	}
 
 	/**
 	 * Creates a cell with its value equal to the cell above plus one

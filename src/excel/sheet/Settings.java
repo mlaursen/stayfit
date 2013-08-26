@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
+import enums.ActivityMultiplier;
 import excel.CellBuilder;
 import excel.CellStyles;
 import excel.Excel;
@@ -40,6 +41,7 @@ public class Settings {
 	public static final short EXTREMELY_ACTIVE = 6;
 	
 	public static final List<Short> NON_NUMBER_FIELDS = new ArrayList<Short>();
+	public static final List<Short> NUMBER = new ArrayList<Short>();
 	public static final List<Short> NUMBER1 = new ArrayList<Short>();
 	public static final List<Short> NUMBER2 = new ArrayList<Short>();
 	public static final List<Short> NUMBER4 = new ArrayList<Short>();
@@ -108,6 +110,7 @@ public class Settings {
 		TITLES.add(CARBS);
 		TITLES.add(FAT);
 		
+		NUMBER1.add(CHANGE);
 		NUMBER1.add(WEIGHT);
 		NUMBER2.add(EWMA5);
 		NUMBER2.add(EWMA7);
@@ -189,7 +192,7 @@ public class Settings {
 			createCell(r, LOST_WEEK, "");
 			createCell(r, TREND, "");
 			createCell(r, SLOPE, "");
-			createCell(r, CFSPLIT, "");
+			createCell(r, CFSPLIT, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
 			createCell(r, CHANGE, "");
 			createCell(r, BMR, "");
 			createCell(r, TDEE, "");
@@ -199,7 +202,7 @@ public class Settings {
 			createCell(r, PROTEIN, "");
 		
 		}
-		
+		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
 		Row cNames = s.getRow(CONSTANTS_ROW_NAMES);
 		Row cVals = s.getRow(CONSTANTS_ROW);
 		createCell(cNames, BIRTHDAY, "Birthday");
@@ -309,6 +312,9 @@ public class Settings {
 			else if(n == SLOPE && rn > Excel.DATA_START) {
 				c = CellBuilder.createFormulaCell(r, n, Formulas.slope(rn));
 			}
+			else if(n == CHANGE && ((rn-1) % 7 != 0)) {
+				c = CellBuilder.createPrevCell(r, n);
+			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {
 					c = CellBuilder.createFormulaCell(r, n, Formulas.smoothed(rn));
@@ -331,6 +337,9 @@ public class Settings {
 	
 	public Set<Short> addStyles(short n, int rn) {
 		Set<Short> styles = new HashSet<Short>();
+		//if(NUMBER.contains(n))
+		//	styles.add(CellStyles.NUMBER);
+		
 		if(NUMBER1.contains(n))
 			styles.add(CellStyles.NUMBER_1);
 		

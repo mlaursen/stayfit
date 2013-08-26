@@ -6,10 +6,10 @@ import org.apache.poi.ss.usermodel.RichTextString;
 
 public enum ActivityMultiplier {
 	SEDENTARY("Sedentary", 1.2),
-	LIGHTLY_ACTIVE("Weight Loss", 1.375),
-	MODERATELY_ACTIVE("Weight Loss #2", 1.55),
-	VERY_ACTIVE("Faster Weight Loss", 1.725),
-	EXTREMELY_ACTIVE("Lean Massing", 1.9);
+	LIGHTLY_ACTIVE("Lightly Active", 1.375),
+	MODERATELY_ACTIVE("Moderately Active", 1.55),
+	VERY_ACTIVE("Very Active", 1.725),
+	EXTREMELY_ACTIVE("Extremely Active", 1.9);
 	
 	public static final String[] ACTIVITY_MULTIPLIER = new String[ActivityMultiplier.values().length];
 	static {
