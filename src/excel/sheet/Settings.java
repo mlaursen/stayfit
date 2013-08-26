@@ -300,8 +300,8 @@ public class Settings {
 				if(rn > x)
 					c = CellBuilder.makeFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
 			}
-			else if(n == LOST_WEEK) {
-				c = CellBuilder.makeFormulaCell(r, rn, Formulas.lostPerWeek(rn));
+			else if(n == LOST_WEEK && rn > 12) {
+				c = CellBuilder.makeFormulaCell(r, n, Formulas.lostPerWeek(rn));
 			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {
