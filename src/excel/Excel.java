@@ -70,6 +70,19 @@ public class Excel {
 		return new XSSFWorkbook(new FileInputStream(f));
 	}
 	
+	public static String rowToLetter(int rowIndex) {
+		String s = "";
+		while(rowIndex >= 0) {
+			s += rowIndex - 26 >= 0 ? "A" : (char) (rowIndex + 65);
+			rowIndex -= 26;
+		}
+		return s;
+	}
+	
+	
+	
+	
+
 	public static void createDropDownBox(Sheet s, String[] constraints, int col) {
 		createDropDown(s, constraints, Excel.DATA_START, Excel.DATA_START, col, col);
 	}
@@ -126,14 +139,5 @@ public class Excel {
 		// Finnaly, create a validation with the constraint over the list of ranges and apply to the sheet
 		DataValidation validation = vHelper.createValidation(validationConstraint,  vRanges);
 		s.addValidationData(validation);
-	}
-	
-	public static String rowToLetter(int rowIndex) {
-		String s = "";
-		while(rowIndex >= 0) {
-			s += rowIndex - 26 >= 0 ? "A" : (char) (rowIndex + 65);
-			rowIndex -= 26;
-		}
-		return s;
 	}
 }

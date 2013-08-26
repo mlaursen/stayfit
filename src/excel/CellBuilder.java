@@ -2,7 +2,15 @@ package excel;
 
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
+import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 public class CellBuilder {
 	
@@ -13,7 +21,7 @@ public class CellBuilder {
 	 * @param o		Object to put into the cell (toString called)
 	 * @return
 	 */
-	public static Cell makeCell(Row r, int index, Object o) {
+	public static Cell createCell(Row r, int index, Object o) {
 		Cell c = r.createCell(index);
 		c.setCellValue(o.toString());
 		return c;
@@ -26,7 +34,7 @@ public class CellBuilder {
 	 * @param f	String representation of the formula
 	 * @return	a Cell
 	 */
-	public static Cell makeFormulaCell(Row r, int i, String f) {
+	public static Cell createFormulaCell(Row r, int i, String f) {
 		Cell c = r.createCell(i);
 		c.setCellFormula(f);
 		return c;
@@ -39,12 +47,13 @@ public class CellBuilder {
 	 * @param index	The column index to create the cell.
 	 * @return		A formula cell in the form of "=$CELL1 + 1"
 	 */
-	public static Cell makePrevPlus1Cell(Row r, int index) {
-		return makePrevPlusXCell(r, index, 1);
+	public static Cell createPrevPlus1Cell(Row r, int index) {
+		return createPrevPlusXCell(r, index, 1);
 	}
 	
-	public static Cell makePrevPlusXCell(Row r, int index, int amt) {
+	public static Cell createPrevPlusXCell(Row r, int index, int amt) {
 		String f = "$" + Excel.rowToLetter(index) + r.getRowNum() + "+" + amt;
-		return makeFormulaCell(r, index, f);
+		return createFormulaCell(r, index, f);
 	}
+	
 }

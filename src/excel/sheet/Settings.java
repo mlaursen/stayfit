@@ -281,15 +281,15 @@ public class Settings {
 	
 	
 	public Cell createFormulaCell(Row r, short n, String f) {
-		return createCell(CellBuilder.makeFormulaCell(r, n, f), n, r.getRowNum());
+		return createCell(CellBuilder.createFormulaCell(r, n, f), n, r.getRowNum());
 	}
 	
 	public Cell createCell(Row r, short n, Object v) {
 		int rn = r.getRowNum();
-		Cell c = CellBuilder.makeCell(r, n, v);
+		Cell c = CellBuilder.createCell(r, n, v);
 		if(rn >= Excel.DATA_START) {
 			if(n == DATE) {
-				c = CellBuilder.makePrevPlus1Cell(r, n);
+				c = CellBuilder.createPrevPlus1Cell(r, n);
 				if(rn == Excel.DATA_START) {
 					c = r.createCell(n); 
 					c.setCellValue(((LocalDate) v).toDate());
@@ -298,26 +298,26 @@ public class Settings {
 			if(n == EWMA5 || n == EWMA7) {
 				int x = n == EWMA5 ? 5 : 7;
 				if(rn > x)
-					c = CellBuilder.makeFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
+					c = CellBuilder.createFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
 			}
 			else if(n == LOST_WEEK && rn > 12) {
-				c = CellBuilder.makeFormulaCell(r, n, Formulas.lostPerWeek(rn));
+				c = CellBuilder.createFormulaCell(r, n, Formulas.lostPerWeek(rn));
 			}
 			else if(n == TREND) {
-				c = CellBuilder.makeFormulaCell(r, n, Formulas.trend(rn));
+				c = CellBuilder.createFormulaCell(r, n, Formulas.trend(rn));
 			}
 			else if(n == SLOPE && rn > Excel.DATA_START) {
-				c = CellBuilder.makeFormulaCell(r, n, Formulas.slope(rn));
+				c = CellBuilder.createFormulaCell(r, n, Formulas.slope(rn));
 			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {
-					c = CellBuilder.makeFormulaCell(r, n, Formulas.smoothed(rn));
+					c = CellBuilder.createFormulaCell(r, n, Formulas.smoothed(rn));
 				}
 				else if(n == FORECAST) {
-					c = CellBuilder.makeFormulaCell(r, n, Formulas.forecast(rn));
+					c = CellBuilder.createFormulaCell(r, n, Formulas.forecast(rn));
 				}
 				else if(n == RESIDUAL) {
-					c = CellBuilder.makeFormulaCell(r, n, Formulas.residual(rn));
+					c = CellBuilder.createFormulaCell(r, n, Formulas.residual(rn));
 				}
 			}
 		}
