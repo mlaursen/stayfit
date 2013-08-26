@@ -44,6 +44,7 @@ public class Settings {
 	public static final short MODERATELY_ACTIVE = 4;
 	public static final short VERY_ACTIVE = 5;
 	public static final short EXTREMELY_ACTIVE = 6;
+	public static final short SPLITS_START = 8;
 	
 	public static final List<Short> NON_NUMBER_FIELDS = new ArrayList<Short>();
 	public static final List<Short> NUMBER = new ArrayList<Short>();
@@ -111,9 +112,6 @@ public class Settings {
 		TITLES.add(TREND);
 		TITLES.add(CONSTANTS);
 		TITLES.add(ACTIVITIES);
-		TITLES.add(SPLITS);
-		TITLES.add(CARBS);
-		TITLES.add(FAT);
 		
 		NUMBER.add(CHANGE);
 		NUMBER2.add(HEIGHT);
@@ -127,6 +125,8 @@ public class Settings {
 		NUMBER2.add(CALORIES);
 		NUMBER2.add(PMULT);
 		NUMBER2.add(PROTEIN);
+		NUMBER2.add(CARBS);
+		NUMBER2.add(FAT);
 		NUMBER4.add(SMOOTHED);
 		NUMBER4.add(FORECAST);
 		NUMBER4.add(RESIDUAL);
@@ -222,9 +222,16 @@ public class Settings {
 			createCell(r, ACTIVITY_VAL, a.getActivityMultiplier());
 		}
 		
+		Row splitTable = s.getRow(SPLITS_START);
+		createCell(splitTable, SPLITS, "Split");
+		createCell(splitTable, CARBS, "Carbs");
+		createCell(splitTable, FAT, "Fat");
+		
 		for(CFSplit cfs : CFSplit.values()) {
-			Row r = s.getRow(csf.asRowNum());
-			
+			Row r = s.getRow(cfs.asRowNum());
+			createCell(r, SPLITS, cfs.getSplitName());
+			createCell(r, CARBS, cfs.getCarb());
+			createCell(r, FAT, cfs.getFat());
 		}
 		
 		Excel.autosizeCols(s);
@@ -317,7 +324,7 @@ public class Settings {
 			styles.add(CellStyles.BORDER_RIGHT);
 		}
 		
-		if(rn % 7 == 0)
+		if(rn % 7 == 0 && n <= PROTEIN)
 			styles.add(CellStyles.BORDER_BOTTOM);
 		
 		if(n == EWMA5 || n == EWMA7) {
@@ -369,8 +376,59 @@ public class Settings {
 					styles.add(CellStyles.BORDER_LEFT);
 				}
 				styles.add(CellStyles.BORDER_RIGHT_THIN);
-			}
+			}		
+		}
+		else if(n >= ACTIVITIES && n <= FAT) {
+			if(rn <= EXTREMELY_ACTIVE) {
+				if(rn < Excel.DATA_START) {
+					styles.add(CellStyles.BORDER_ALL);
+				}
+				else {
+					if(rn == Excel.DATA_START) {
+						styles.add(CellStyles.BORDER_TOP);
+					}
 					
+					if(n == ACTIVITIES) {
+						styles.add(CellStyles.BORDER_LEFT);
+						styles.add(CellStyles.BORDER_RIGHT_THIN);
+					}
+					else {
+						styles.add(CellStyles.BORDER_LEFT_THIN);
+						styles.add(CellStyles.BORDER_RIGHT);
+					}
+					
+					if(rn < EXTREMELY_ACTIVE-1) {
+						styles.add(CellStyles.BORDER_BOTTOM_THIN);
+					}
+					else {
+						styles.add(CellStyles.BORDER_BOTTOM);
+					}
+				}
+			}
+			else {
+				if(rn == SPLITS_START) {
+					styles.add(CellStyles.BORDER_ALL);
+					styles.add(CellStyles.BOLD);
+				}
+				else {
+					if(n == SPLITS) {
+						styles.add(CellStyles.BORDER_LEFT);
+						styles.add(CellStyles.BORDER_RIGHT_THIN);
+					}
+					else {
+						styles.add(CellStyles.BORDER_LEFT_THIN);
+						if(n == FAT)
+							styles.add(CellStyles.BORDER_RIGHT);
+					}
+					if(rn < CFSplit.values()[CFSplit.values().length -1 ].asRowNum()) {
+						styles.add(CellStyles.BORDER_BOTTOM_THIN);
+					}
+					else {
+						styles.add(CellStyles.BORDER_BOTTOM);
+					}
+				}
+			}
+			
 		}
 		return styles;
 	}

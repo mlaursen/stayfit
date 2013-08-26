@@ -73,13 +73,13 @@ public class CellStyles {
 	
 	private static CellStyle applyBorderStyle(CellStyle cs, short dir) {
 		short type = (dir >= BORDER_LEFT_THIN && dir <= BORDER_ALL_THIN) ? CellStyle.BORDER_THIN : CellStyle.BORDER_MEDIUM;
-		if(dir == BORDER_LEFT || dir == BORDER_LEFT_THIN || dir == BORDER_ALL)
+		if(dir == BORDER_LEFT || dir == BORDER_LEFT_THIN || dir == BORDER_ALL || dir == BORDER_ALL_THIN)
 			cs.setBorderLeft(type);
-		else if(dir == BORDER_RIGHT || dir == BORDER_RIGHT_THIN || dir == BORDER_ALL)
+		if(dir == BORDER_RIGHT || dir == BORDER_RIGHT_THIN || dir == BORDER_ALL || dir == BORDER_ALL_THIN)
 			cs.setBorderRight(type);
-		else if(dir == BORDER_BOTTOM || dir == BORDER_BOTTOM_THIN || dir == BORDER_ALL)
+		if(dir == BORDER_BOTTOM || dir == BORDER_BOTTOM_THIN || dir == BORDER_ALL || dir == BORDER_ALL_THIN)
 			cs.setBorderBottom(type);
-		else if(dir == BORDER_TOP || dir == BORDER_TOP_THIN || dir == BORDER_ALL)
+		if(dir == BORDER_TOP || dir == BORDER_TOP_THIN || dir == BORDER_ALL || dir == BORDER_ALL_THIN)
 			cs.setBorderTop(type);
 		return cs;
 	}
