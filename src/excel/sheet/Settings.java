@@ -210,9 +210,9 @@ public class Settings {
 		createCell(cNames, ALPHA, "alpha");
 		createCell(cVals, BIRTHDAY, "");
 		createCell(cVals, HEIGHT, "");
-		createCell(cVals, ACTIVITY, "");
-		createCell(cVals, UNITS, "");
-		createCell(cVals, GENDER, "");
+		createCell(cVals, ACTIVITY, "");	// need to change to a dropdown
+		createCell(cVals, UNITS, "");		// need to change to a dropdown
+		createCell(cVals, GENDER, "");		// need to change to a dropdown
 		createCell(cVals, ALPHA, "0.3");
 		
 		Row r = s.getRow(SEDENTARY);
@@ -295,16 +295,23 @@ public class Settings {
 					c.setCellValue(((LocalDate) v).toDate());
 				}
 			}
-			//else if(n.contains("EWMA")) {
 			if(n == EWMA5 || n == EWMA7) {
 				int x = n == EWMA5 ? 5 : 7;
 				if(rn > x)
 					c = CellBuilder.makeFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
 			}
+			else if(n == LOST_WEEK) {
+				c = CellBuilder.makeFormulaCell(r, rn, Formulas.lostPerWeek(rn));
+			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
-				//if(n == "Smoothed") {
 				if(n == SMOOTHED) {
 					c = CellBuilder.makeFormulaCell(r, n, Formulas.smoothed(rn));
+				}
+				else if(n == FORECAST) {
+					c = CellBuilder.makeFormulaCell(r, n, Formulas.forecast(rn));
+				}
+				else if(n == RESIDUAL) {
+					c = CellBuilder.makeFormulaCell(r, n, Formulas.residual(rn));
 				}
 			}
 		}
@@ -362,6 +369,11 @@ public class Settings {
 			if(n == RESIDUAL)
 				styles.add(CellStyles.BORDER_RIGHT);
 		}
+		else if(n == LOST_WEEK) {
+			styles.add(CellStyles.BORDER_RIGHT);
+			if(rn <= 12 && rn >= Excel.DATA_START)
+				styles.add(CellStyles.GRAY_FILL);
+		}
 		else if(n == DATE) {
 			styles.add(CellStyles.DATE);
 		}
@@ -373,7 +385,7 @@ public class Settings {
 	}
 	
 	public static String getConst(short c) {
-		return "$" + Excel.rowToLetter(c) + "$" + CONSTANTS_ROW;
+		return "$" + Excel.rowToLetter(c) + "$" + (CONSTANTS_ROW + 1);
 	}
 	
 	

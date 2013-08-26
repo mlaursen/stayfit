@@ -21,6 +21,12 @@ public class Formulas {
 		return "IF" + paren(b + "," + t + "," + e);
 	}
 	
+	private static String ifFormula(String b, String e) {
+		return ifFormula(b, NA(), e);
+	}
+	
+	private static String isEmpty() { return "=\"\""; }
+	
 	/**
 	 * Creates an excel text format formula
 	 * @param t	Text
@@ -46,7 +52,7 @@ public class Formulas {
 	 * @param args	The arguments to be averaged
 	 * @return	A string for the excel average formula
 	 */
-	private static String avgFormula(String[] args) {
+	private static String avg(String[] args) {
 		StringBuilder a = new StringBuilder("");
 		int l = args.length;
 		for(int i = 0; i < l; i++) {
@@ -55,6 +61,10 @@ public class Formulas {
 				a.append(",");
 		}
 		return "AVERAGE" + paren(a.toString());
+	}
+	
+	private static String avg(String c1, String c2) {
+		return "AVERAGE" + paren(c1 + ":" + c2);
 	}
 	
 	public static String NA() { return "NA()"; }
@@ -67,7 +77,7 @@ public class Formulas {
 	 */
 	public static String ewmaFormula(int rn, int x) {
 		String w = Settings.getCol(Settings.WEIGHT);
-		String b = w + (rn+1) + "=\"\"";
+		String b = w + (rn+1) + isEmpty();
 		double[] ms;
 		if(x == 5)
 			ms = new double[]{.25, .5, 1, 1.25, 2};
@@ -77,8 +87,8 @@ public class Formulas {
 		for(int i = 0, j = x-1; i < x; i++, j--) {
 			as[i] = ms[i] + "*" + w + (rn-j);
 		}
-		String e = avgFormula(as);
-		return ifFormula(b, NA(), e);
+		String e = avg(as);
+		return ifFormula(b, e);
 	}
 	
 	/**
@@ -87,7 +97,7 @@ public class Formulas {
 	 * @return		String of the formula
 	 */
 	public static String dowFormula(int rn) {
-		return textFormula(Settings.getCol(Settings.DATE) + "" + (rn+1), "ddd");
+		return textFormula(Settings.getCol(Settings.DATE) + (rn+1), "ddd");
 	}
 	
 	/**
@@ -99,8 +109,41 @@ public class Formulas {
 		String a = Settings.getConst(Settings.ALPHA);
 		String w = Settings.getCol(Settings.WEIGHT) + (rn+1);
 		String f = Settings.getCol(Settings.FORECAST) + (rn+1);
-		String b = w + "=\"\"";
+		String b = w + isEmpty();
 		String e = paren(a + "*" + w) + "+" + paren(paren("1-" + a) + "*"+f);
-		return ifFormula(b, NA(), e);
+		return ifFormula(b, e);
+	}
+	
+	/**
+	 * Creates the formlua for a forecasted weight
+	 * @param rn	Row number
+	 * @return		Formula as a string.
+	 */
+	public static String forecast(int rn) {
+		String w = Settings.getCol(Settings.WEIGHT);
+		String b = w + (rn+1) + isEmpty();
+		String e = rn == 6 ? avg(w+2, w+7) : Settings.getCol(Settings.SMOOTHED) + rn;
+		return ifFormula(b, e);
+	}
+	
+	/**
+	 * Creates a residual formula
+	 * @param rn	Row number
+	 * @return		Formula as a string.
+	 */
+	public static String residual(int rn) {
+		String w = Settings.getCol(Settings.WEIGHT) + (rn+1);
+		String b = w + isEmpty();
+		String e = w + "-" + Settings.getCol(Settings.FORECAST) + (rn+1);
+		return ifFormula(b, e);
+	}
+	
+	/**
+	 * Creates a lost/wk formula
+	 * @param rn	Row number
+	 * @return		Formula as a string.
+	 */
+	public static String lostPerWeek(int rn) {
+		return "";
 	}
 }
