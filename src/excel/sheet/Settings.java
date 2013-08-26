@@ -186,7 +186,7 @@ public class Settings {
 			createCell(r, TREND, "");
 			createCell(r, SLOPE, "");
 			createCell(r, CFSPLIT, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
-			createCell(r, CHANGE, "");
+			createCell(r, CHANGE, 0);
 			createCell(r, BMR, "");
 			createCell(r, TDEE, "");
 			createCell(r, BMR_, "");
@@ -204,8 +204,8 @@ public class Settings {
 		createCell(cNames, UNITS, "Units");
 		createCell(cNames, GENDER, "Gender");
 		createCell(cNames, ALPHA, "alpha");
-		createCell(cVals, BIRTHDAY, "1/1/1991");
-		createCell(cVals, HEIGHT, "");
+		createCell(cVals, BIRTHDAY, "1/1/1990");
+		createCell(cVals, HEIGHT, 0);
 		createCell(cVals, ACTIVITY, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
 		createCell(cVals, UNITS, UnitSystem.IMPERIAL);
 		createCell(cVals, GENDER, Gender.MALE.getGenderName());
@@ -280,6 +280,9 @@ public class Settings {
 			}
 			else if(n == BMR) {
 				c = CellBuilder.createFormulaCell(r, n, Formulas.bmr(rn));
+			}
+			else if(n == TDEE) {
+				c = CellBuilder.createFormulaCell(r, n, Formulas.tdee(rn));
 			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {

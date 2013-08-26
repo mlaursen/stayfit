@@ -46,17 +46,20 @@ public class Formulas {
 		return "(" + s + ")";
 	}
 	
-	private static String sum(String f, String ...args) {
-		String[] args2 = new String[args.length + 1];
-		args2[0] = f;
-		System.arraycopy(args, 0, args2, 1, args.length);
-		return sum(args2);
-	}
-	
+	/**
+	 * Creates an excel SUM formula for an array of arguments
+	 * @param args	An array of string arguments. Can be comma separated
+	 * @return	SUM(a1,a2,a3,...)
+	 */
 	private static String sum(String ...args) {
 		return "SUM" + paren(commaSeparated(args));
 	}
 	
+	/**
+	 * Creates an excel PRODUCT formula for an array of arguments
+	 * @param args	AN array of string arguments. Can be comma separated
+	 * @return PRODUCT(a1,a2,a3,...)
+	 */
 	private static String product(String ...args) {
 		return "PRODUCT" + paren(commaSeparated(args));
 	}
@@ -69,6 +72,11 @@ public class Formulas {
 		return "YEAR" + paren(y);
 	}
 	
+	/**
+	 * Helper method for turning an array of args into csv
+	 * @param args
+	 * @return
+	 */
 	private static String commaSeparated(String ...args) {
 		StringBuilder s = new StringBuilder("");
 		int l = args.length;
@@ -78,6 +86,20 @@ public class Formulas {
 				s.append(",");
 		}
 		return s.toString();
+	}
+	
+	/**
+	 * Creates an excel VLOOKUP formula
+	 * @param lookup	Cell/Value to search for
+	 * @param col1		First column of search
+	 * @param col2		Second column of search
+	 * @param colReturn	The column to return
+	 * @param exact		Equals exactly?
+	 * @return	VLOOKUP(lookup, col1:col2, colReturn, exact)..
+	 */
+	private static String vlookup(String lookup, String col1, String col2, int colReturn, boolean exact) {
+		String[] args = { lookup, col1 + ":" + col2, "" + colReturn, (exact ? "TRUE" : "FALSE") };
+		return "VLOOKUP" + paren(commaSeparated(args));
 	}
 	
 	/**
@@ -235,5 +257,17 @@ public class Formulas {
 		String f = "655+" + ifFormula(u, fi, fm);
 		String m = "66+" + ifFormula(u, mi, mm);
 		return ifFormula(b, f, m);
+	}
+	
+	/**
+	 * Creates the tdee formula. bmr * activity multiplier
+	 * @param rn	Row number
+	 * @return
+	 */
+	public static String tdee(int rn) {
+		String a = Settings.getConst(Settings.ACTIVITY);
+		String start = Settings.getCol(Settings.ACTIVITIES) + "$" + Settings.CONSTANTS_ROW;
+		String end = Settings.getCol(Settings.ACTIVITY_VAL) + "$" + Settings.EXTREMELY_ACTIVE;
+		return Settings.getCol(Settings.BMR) + (rn+1) + "*" + vlookup(a, start, end, 2, false);
 	}
 }

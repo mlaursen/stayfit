@@ -25,9 +25,10 @@ public class CellBuilder {
 	 */
 	public static Cell createCell(Row r, int index, Object o) {
 		Cell c = r.createCell(index);
-		if(o.getClass().isAssignableFrom(Double.class)) {
-			c.setCellValue((double) o);
-		}
+		if(Integer.class.isAssignableFrom(o.getClass()))
+			c.setCellValue((Integer) o);
+		else if(Double.class.isAssignableFrom(o.getClass()))
+			c.setCellValue((Double) o);
 		else 
 			c.setCellValue(o.toString());
 		return c;
