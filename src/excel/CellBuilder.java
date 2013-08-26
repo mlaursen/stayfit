@@ -1,6 +1,8 @@
 package excel;
 
 
+import java.util.Arrays;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
@@ -23,7 +25,11 @@ public class CellBuilder {
 	 */
 	public static Cell createCell(Row r, int index, Object o) {
 		Cell c = r.createCell(index);
-		c.setCellValue(o.toString());
+		if(o.getClass().isAssignableFrom(Double.class)) {
+			c.setCellValue((double) o);
+		}
+		else 
+			c.setCellValue(o.toString());
 		return c;
 	}
 	

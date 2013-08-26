@@ -28,8 +28,8 @@ import excel.sheet.cell.Formulas;
  */
 public class Settings {
 	
-	public static final int SIX_DIGIT_WIDTH = 28*80;
-	public static final int FIVE_DIGIT_WIDTH = 28*60;
+	public static final int PIXELS_8 = 28*80;
+	public static final int PIXELS_6 = 28*60;
 	public static final short DOW, DATE, EWMA5, EWMA7, WEIGHT, SMOOTHED, FORECAST, RESIDUAL, LOST_WEEK;
 	public static final short TREND, SLOPE, CFSPLIT, CHANGE, BMR, TDEE, BMR_, CALORIES, PMULT, PROTEIN;
 	
@@ -99,7 +99,6 @@ public class Settings {
 		TITLES_RIGHT_BORDER.add(CALORIES);
 		TITLES_RIGHT_BORDER.add(PMULT);
 		TITLES_RIGHT_BORDER.add(PROTEIN);
-		TITLES_RIGHT_BORDER.add(CONSTANTS);
 		
 		TITLES.addAll(TITLES_RIGHT_BORDER);
 		TITLES.add(DOW);
@@ -222,7 +221,7 @@ public class Settings {
 		createCell(cVals, ACTIVITY, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
 		createCell(cVals, UNITS, UnitSystem.IMPERIAL);
 		createCell(cVals, GENDER, Gender.MALE.getGenderName());
-		createCell(cVals, ALPHA, "0.3");
+		createCell(cVals, ALPHA, 0.3);
 		
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTANTS_ROW, ACTIVITY);
@@ -294,11 +293,13 @@ public class Settings {
 		*/
 		
 		Excel.autosizeCols(s);
-		s.setColumnWidth(BMR, SIX_DIGIT_WIDTH);
-		s.setColumnWidth(TDEE, SIX_DIGIT_WIDTH);
-		s.setColumnWidth(CALORIES, SIX_DIGIT_WIDTH);
-		s.setColumnWidth(TREND, FIVE_DIGIT_WIDTH);
-		s.setColumnWidth(SLOPE, FIVE_DIGIT_WIDTH);
+		s.setColumnWidth(BMR, PIXELS_8);
+		s.setColumnWidth(TDEE, PIXELS_8);
+		s.setColumnWidth(CALORIES, PIXELS_8);
+		s.setColumnWidth(TREND, PIXELS_6);
+		s.setColumnWidth(SLOPE, PIXELS_6);
+		s.setColumnWidth(BIRTHDAY, PIXELS_8);
+		s.setColumnWidth(HEIGHT, PIXELS_8);
 		return s;
 	}
 	
@@ -318,7 +319,7 @@ public class Settings {
 					c.setCellValue(((LocalDate) v).toDate());
 				}
 			}
-			if(n == EWMA5 || n == EWMA7) {
+			else if(n == EWMA5 || n == EWMA7) {
 				int x = n == EWMA5 ? 5 : 7;
 				if(rn > x)
 					c = CellBuilder.createFormulaCell(r, n, Formulas.ewmaFormula(rn, x));
@@ -425,13 +426,13 @@ public class Settings {
 				styles.add(CellStyles.BORDER_BOTTOM);
 			}
 			
-			if(n == BIRTHDAY) {
-				styles.add(CellStyles.BORDER_LEFT);
-			}
-			else if(n == ALPHA) {
+			if(n == ALPHA) {
 				styles.add(CellStyles.BORDER_RIGHT);
 			}
 			else {
+				if(n == BIRTHDAY) {
+					styles.add(CellStyles.BORDER_LEFT);
+				}
 				styles.add(CellStyles.BORDER_RIGHT_THIN);
 			}
 					
