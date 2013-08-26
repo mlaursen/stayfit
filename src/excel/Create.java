@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import excel.sheet.Settings;
+import excel.sheet.cell.Formulas;
 
 public class Create {
 	
@@ -34,6 +35,7 @@ public class Create {
 		//String workbook = Excel.DEFAULT_PATH + Excel.DEFAULT_WORKBOOK_NAME;
 		Excel.writeToExcel(createWorkbook(), workbook);
 		Desktop.getDesktop().open(new File(workbook));
+		
 		
 		/*
 		

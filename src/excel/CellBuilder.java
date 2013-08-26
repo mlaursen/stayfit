@@ -40,6 +40,12 @@ public class CellBuilder {
 		return c;
 	}
 	
+	/**
+	 * Creates a formula cell for copying the contents of the previous verticle cell
+	 * @param r	Row
+	 * @param i	Index
+	 * @return	Cell
+	 */
 	public static Cell createPrevCell(Row r, int i) {
 		return createFormulaCell(r, i, "$" + Excel.rowToLetter(i) + r.getRowNum());
 	}

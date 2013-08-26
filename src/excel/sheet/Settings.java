@@ -220,6 +220,9 @@ public class Settings {
 		
 		Row r = s.getRow(SEDENTARY);
 		r.createCell(ACTIVITY_VAL);
+		
+		
+		//System.out.println(Formulas.bmr(4));
 		//Row cNames = s.getRow(ROWS.get("Constants") - 1);
 		//Row cVals = s.getRow(ROWS.get("Constant Values") - 1);
 		//createCell(cNames, "Birthday");
@@ -314,6 +317,9 @@ public class Settings {
 			}
 			else if(n == CHANGE && ((rn-1) % 7 != 0)) {
 				c = CellBuilder.createPrevCell(r, n);
+			}
+			else if(n == BMR) {
+				c = CellBuilder.createFormulaCell(r, n, Formulas.bmr(rn));
 			}
 			else if(rn > 5) {	// grayed otherwise with empty string as value
 				if(n == SMOOTHED) {
