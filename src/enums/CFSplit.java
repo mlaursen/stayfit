@@ -4,7 +4,6 @@ import java.util.NoSuchElementException;
 
 import org.apache.poi.ss.usermodel.RichTextString;
 
-import excel.Excel;
 import excel.sheet.Settings;
 
 public enum CFSplit {

@@ -1,18 +1,8 @@
 package excel;
 
 
-import java.util.Arrays;
-
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 public class CellBuilder {
 	
@@ -54,7 +44,7 @@ public class CellBuilder {
 	 * @return	Cell
 	 */
 	public static Cell createPrevCell(Row r, int i) {
-		return createFormulaCell(r, i, "$" + Excel.rowToLetter(i) + r.getRowNum());
+		return createFormulaCell(r, i, "$" + Excel.numToColumn(i) + r.getRowNum());
 	}
 
 	/**
@@ -67,8 +57,15 @@ public class CellBuilder {
 		return createPrevPlusXCell(r, index, 1);
 	}
 	
+	/**
+	 * Creates a cell with its value equal to the cell above plus x
+	 * @param r		Row
+	 * @param index	Column index
+	 * @param amt	Plus amt
+	 * @return		Cell
+	 */
 	public static Cell createPrevPlusXCell(Row r, int index, int amt) {
-		String f = "$" + Excel.rowToLetter(index) + r.getRowNum() + "+" + amt;
+		String f = "$" + Excel.numToColumn(index) + r.getRowNum() + "+" + amt;
 		return createFormulaCell(r, index, f);
 	}
 	

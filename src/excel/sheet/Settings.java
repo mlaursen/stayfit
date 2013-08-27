@@ -1,7 +1,6 @@
 package excel.sheet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,10 +11,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.LocalDate;
 
-import enums.CFSplit;
 import enums.ActivityMultiplier;
-import enums.Gender;
-import enums.UnitSystem;
+import enums.CFSplit;
 import excel.CellBuilder;
 import excel.CellStyles;
 import excel.Excel;
@@ -230,15 +227,15 @@ public class Settings {
 		createCell(cVals, BIRTHDAY, "1/1/1990");
 		createCell(cVals, HEIGHT, 0);
 		createCell(cVals, ACTIVITY, ActivityMultiplier.SEDENTARY.getActivityMultiplierName());
-		createCell(cVals, UNITS, UnitSystem.IMPERIAL);
-		createCell(cVals, GENDER, Gender.MALE.getGenderName());
+		createCell(cVals, UNITS, "Imperial");
+		createCell(cVals, GENDER, "Male");
 		createCell(cVals, ALPHA, 0.3);
 		
 		Excel.createDropDown(s, new String[]{"Y", "N" }, BMR_);
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CFSPLIT);
 		Excel.createDropDown(s, ActivityMultiplier.ACTIVITY_MULTIPLIER, CONSTANTS_ROW, ACTIVITY);
-		Excel.createDropDown(s, UnitSystem.UNIT_SYSTEM, CONSTANTS_ROW, UNITS);
-		Excel.createDropDown(s, Gender.GENDER, CONSTANTS_ROW, GENDER);
+		Excel.createDropDown(s, new String[]{"Imperial", "Metric"}, CONSTANTS_ROW, UNITS);
+		Excel.createDropDown(s, new String[]{"Male", "Female"}, CONSTANTS_ROW, GENDER);
 		
 		for(ActivityMultiplier a : ActivityMultiplier.values()) {
 			Row r = s.getRow(a.asRowNum());
@@ -438,41 +435,21 @@ public class Settings {
 		return styles;
 	}
 	
+	/**
+	 * Gets a column letter reference
+	 * @param r	short for the column
+	 * @return	String
+	 */
 	public static String getCol(short r) {
-		return "$" + Excel.rowToLetter(r);
+		return "$" + Excel.numToColumn(r);
 	}
 	
+	/**
+	 * Gets a constant from the settings sheet as a reference
+	 * @param c	Constant
+	 * @return	$A$4 --example
+	 */
 	public static String getConst(short c) {
-		return "$" + Excel.rowToLetter(c) + "$" + (CONSTANTS_ROW + 1);
+		return "$" + Excel.numToColumn(c) + "$" + (CONSTANTS_ROW + 1);
 	}
-	
-	
-	
-	
-	
-	
-	
-
-	/*
-	public static User extractSettings(Workbook wb, int row) {
-		Sheet s = wb.getSheet("Settings");
-		
-		Row constantsRow = s.getRow(Excel.DATA_START);
-		row = row / 6 + 1;
-		
-		/*
-		Row updatingRow = s.getRow(row);
-		double weight = updatingRow.getCell(WEIGHT).getNumericCellValue();
-		double height = constantsRow.getCell(HEIGHT).getNumericCellValue();
-		double age = constantsRow.getCell(AGE).getNumericCellValue();
-		UnitSystem units = UnitSystem.parseRichTextString(constantsRow.getCell(UNIT_SYSTEM).getRichStringCellValue());
-		ActivityMultiplier activity = ActivityMultiplier.parseRichTextString(constantsRow.getCell(ACTIVITY_MULTIPLIER).getRichStringCellValue());
-		CalorieSplit calSplit = CalorieSplit.parseRichTextString(updatingRow.getCell(CALORIE_SPLIT).getRichStringCellValue());
-		DayType type = DayType.parseRichTextString(updatingRow.getCell(DAY_TYPE).getRichStringCellValue());
-		CarbFatSplit carbFatSplit = CarbFatSplit.parseRichTextString(updatingRow.getCell(CARB_FAT_SPLIT).getRichStringCellValue());
-		Formula f = Formula.parseRichTextString(constantsRow.getCell(FORMULA).getRichStringCellValue());
-		Sex sex = Sex.parseRichTextString(constantsRow.getCell(SEX).getRichStringCellValue());
-		*/
-	//	return null; //new User(weight, height, (int) age, units, type, carbFatSplit, activity, calSplit, f, sex);
-	//}
 }

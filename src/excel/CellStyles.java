@@ -6,7 +6,6 @@ import java.util.Set;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PatternFormatting;
@@ -15,6 +14,12 @@ import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+/**
+ * CellStyles for a cell.
+ * 
+ * @author mikkel.laursen
+ *
+ */
 public class CellStyles {
 	public static final String DATE_FORMAT = "dd-mmm";
 	public static final String NUMBER_FORMAT = "0.00";
@@ -44,6 +49,12 @@ public class CellStyles {
 		
 	}
 
+	/**
+	 * Apply all the styles in the collection to the cell
+	 * @param styles	Collection of styles
+	 * @param c			Cell
+	 * @return			Cell with styles.
+	 */
 	public static Cell applyStyles(Set<Short> styles, Cell c) {
 		Workbook wb = c.getSheet().getWorkbook();
 		CellStyle cs = wb.createCellStyle();
@@ -72,9 +83,8 @@ public class CellStyles {
 	}
 	
 	/**
-	 * 
-	 * @param s
-	 * @param format
+	 * Only adds the highlighting of a row if the date in the date column is =TODAY()
+	 * @param s	Sheet
 	 */
 	public static void applyConditionalFormat(Sheet s) {
 		SheetConditionalFormatting scf = s.getSheetConditionalFormatting();
@@ -86,6 +96,12 @@ public class CellStyles {
 		scf.addConditionalFormatting(regions, r1);
 	}
 	
+	/**
+	 * Helper method for applying bold to a cell.
+	 * @param cs	The cellstyle to add bold
+	 * @param wb	Workbook
+	 * @return	Cellstyle
+	 */
 	private static CellStyle applyBoldStyle(CellStyle cs, Workbook wb) {
 		Font f = wb.createFont();
 		f.setBoldweight(Font.BOLDWEIGHT_BOLD);
@@ -93,6 +109,12 @@ public class CellStyles {
 		return cs;
 	}
 	
+	/**
+	 * Helper method for adding borders to a cell
+	 * @param cs	CellStyle
+	 * @param dir	Which side(s) to have a border
+	 * @return		CellStyle
+	 */
 	private static CellStyle applyBorderStyle(CellStyle cs, short dir) {
 		short type = (dir >= BORDER_LEFT_THIN && dir <= BORDER_ALL_THIN) ? CellStyle.BORDER_THIN : CellStyle.BORDER_MEDIUM;
 		if(dir == BORDER_LEFT || dir == BORDER_LEFT_THIN || dir == BORDER_ALL || dir == BORDER_ALL_THIN)
@@ -106,23 +128,49 @@ public class CellStyles {
 		return cs;
 	}
 	
+	/**
+	 * Adds a gray fill style
+	 * @param cs	CellStyle
+	 * @return	CellStyle
+	 */
 	private static CellStyle applyGrayFillStyle(CellStyle cs) {
 		cs.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
 		cs.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		return cs;
 	}
 	
+	/**
+	 * Formats a cell to be a number
+	 * @param cs	Cellstyle
+	 * @param wb	Workbook
+	 * @param prec	Precision of the number
+	 * @return	CellStyle
+	 */
 	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb, int prec) {
 		String format = "0" + (prec == 0 ? "" : ".");
 		for(int i = 0; i < prec; i++)
 			format += 0;
 		return applyNumberStyle(cs, wb, format);
 	}
+	
+	/**
+	 * 
+	 * @param cs
+	 * @param wb
+	 * @param format
+	 * @return
+	 */
 	private static CellStyle applyNumberStyle(CellStyle cs, Workbook wb, String format) {
 		cs.setDataFormat(wb.createDataFormat().getFormat(format));
 		return cs;
 	}
 	
+	/**
+	 * 
+	 * @param cs
+	 * @param wb
+	 * @return
+	 */
 	private static CellStyle applyDateStyle(CellStyle cs, Workbook wb) {
 		cs.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat(DATE_FORMAT));
 		return cs;
