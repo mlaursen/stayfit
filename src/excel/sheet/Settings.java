@@ -1,6 +1,7 @@
 package excel.sheet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +51,7 @@ public class Settings {
 	public static final List<Short> NUMBER = new ArrayList<Short>();
 	public static final List<Short> NUMBER1 = new ArrayList<Short>();
 	public static final List<Short> NUMBER2 = new ArrayList<Short>();
+	public static final List<Short> NUMBER3 = new ArrayList<Short>();
 	public static final List<Short> NUMBER4 = new ArrayList<Short>();
 	public static final List<Short> TITLES_RIGHT_BORDER = new ArrayList<Short>();
 	public static final List<Short> TITLES = new ArrayList<Short>();
@@ -127,6 +129,7 @@ public class Settings {
 		NUMBER2.add(PROTEIN);
 		NUMBER2.add(CARBS);
 		NUMBER2.add(FAT);
+		NUMBER3.add(ACTIVITY_VAL);
 		NUMBER4.add(SMOOTHED);
 		NUMBER4.add(FORECAST);
 		NUMBER4.add(RESIDUAL);
@@ -309,6 +312,9 @@ public class Settings {
 		
 		if(NUMBER2.contains(n))
 			styles.add(CellStyles.NUMBER_2);
+		
+		if(NUMBER3.contains(n) && rn < 8)
+			styles.add(CellStyles.NUMBER_3);
 		
 		if(NUMBER4.contains(n))
 			styles.add(CellStyles.NUMBER_4);

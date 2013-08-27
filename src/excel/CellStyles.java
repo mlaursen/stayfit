@@ -14,7 +14,7 @@ public class CellStyles {
 	public static final String NUMBER_FORMAT = "0.00";
 	public static final short BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, BORDER_ALL;
 	public static final short BORDER_LEFT_THIN, BORDER_RIGHT_THIN, BORDER_TOP_THIN, BORDER_BOTTOM_THIN, BORDER_ALL_THIN;
-	public static final short BOLD, GRAY_FILL, NUMBER, NUMBER_1, NUMBER_2, NUMBER_4, DATE;
+	public static final short BOLD, GRAY_FILL, NUMBER, NUMBER_1, NUMBER_2, NUMBER_3, NUMBER_4, DATE;
 	static {
 		short i = 0;
 		BORDER_LEFT = i++;
@@ -32,6 +32,7 @@ public class CellStyles {
 		NUMBER = i++;
 		NUMBER_1 = i++;
 		NUMBER_2 = i++;
+		NUMBER_3 = i++;
 		NUMBER_4 = i++;
 		DATE = i++;
 		
