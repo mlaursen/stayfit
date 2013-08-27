@@ -195,7 +195,7 @@ public class Formulas {
 	public static String lostPerWeek(int rn) {
 		String w = Settings.getCol(Settings.WEIGHT);
 		String b = w + (rn+1) + isEmpty();
-		String e = w + (rn+8) + "-" + w + (rn+1);
+		String e = w + (rn+1) + "-" + w + (rn-6);
 		return ifFormula(b, e);
 	}
 	

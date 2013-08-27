@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PatternFormatting;
@@ -75,13 +76,13 @@ public class CellStyles {
 	 * @param s
 	 * @param format
 	 */
-	public static void applyConditionalFormat(Sheet s, short format) {
+	public static void applyConditionalFormat(Sheet s) {
 		SheetConditionalFormatting scf = s.getSheetConditionalFormatting();
 		ConditionalFormattingRule r1 = scf.createConditionalFormattingRule("$B1=TODAY()");
 		PatternFormatting fill = r1.createPatternFormatting();
 		fill.setFillBackgroundColor(IndexedColors.YELLOW.getIndex());
 		fill.setFillPattern(PatternFormatting.SOLID_FOREGROUND);
-		CellRangeAddress[] regions = { CellRangeAddress.valueOf("$A1:$S" + s.getLastRowNum() + 1) };
+		CellRangeAddress[] regions = { CellRangeAddress.valueOf("$A1:$S"+s.getLastRowNum()+1) };
 		scf.addConditionalFormatting(regions, r1);
 	}
 	

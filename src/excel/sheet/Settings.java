@@ -258,7 +258,7 @@ public class Settings {
 			createCell(r, FAT, cfs.getFat());
 		}
 		
-		CellStyles.applyConditionalFormat(s, CellStyles.BOLD);
+		CellStyles.applyConditionalFormat(s);
 		Excel.autosizeCols(s);
 		s.setColumnWidth(BMR, PIXELS_8);
 		s.setColumnWidth(TDEE, PIXELS_8);
