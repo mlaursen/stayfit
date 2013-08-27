@@ -10,7 +10,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import excel.sheet.Settings;
-import excel.sheet.cell.Formulas;
 
 public class Create {
 	
@@ -26,17 +25,16 @@ public class Create {
 		//System.out.println(Excel.rowToLetter(28));
 		//System.out.println(Excel.rowToLetter(100));
 		
-		/*
+		
 		JFileChooser fc = new JFileChooser();
 		fc.setSelectedFile(new File(Excel.DEFAULT_WORKBOOK_NAME));
 		int r = fc.showOpenDialog(null);
-		String workbook2 = (r == JFileChooser.CANCEL_OPTION ? Excel.DEFAULT_PATH : fc.getSelectedFile().getAbsolutePath()) + Excel.DEFAULT_WORKBOOK_NAME;
-		System.out.println(workbook2);
-		*/
-		String workbook = "C:\\My_Data\\" + Excel.DEFAULT_WORKBOOK_NAME;
+		String wb = (r == JFileChooser.CANCEL_OPTION ? Excel.DEFAULT_PATH : fc.getSelectedFile().getAbsolutePath());
+		wb = wb.endsWith(".xlsx") ? wb : wb + Excel.DEFAULT_WORKBOOK_NAME;
+		//String workbook = "C:\\My_Data\\" + Excel.DEFAULT_WORKBOOK_NAME;
 		//String workbook = Excel.DEFAULT_PATH + Excel.DEFAULT_WORKBOOK_NAME;
-		Excel.writeToExcel(createWorkbook(), workbook);
-		Desktop.getDesktop().open(new File(workbook));
+		Excel.writeToExcel(createWorkbook(), wb);
+		Desktop.getDesktop().open(new File(wb));
 		
 		
 		/*
