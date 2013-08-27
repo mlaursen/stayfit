@@ -5,9 +5,14 @@ import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.PatternFormatting;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 public class CellStyles {
 	public static final String DATE_FORMAT = "dd-mmm";
@@ -63,6 +68,21 @@ public class CellStyles {
 		}
 		c.setCellStyle(cs);
 		return c;
+	}
+	
+	/**
+	 * 
+	 * @param s
+	 * @param format
+	 */
+	public static void applyConditionalFormat(Sheet s, short format) {
+		SheetConditionalFormatting scf = s.getSheetConditionalFormatting();
+		ConditionalFormattingRule r1 = scf.createConditionalFormattingRule("$B1=TODAY()");
+		PatternFormatting fill = r1.createPatternFormatting();
+		fill.setFillBackgroundColor(IndexedColors.YELLOW.getIndex());
+		fill.setFillPattern(PatternFormatting.SOLID_FOREGROUND);
+		CellRangeAddress[] regions = { CellRangeAddress.valueOf("$A1:$S" + s.getLastRowNum() + 1) };
+		scf.addConditionalFormatting(regions, r1);
 	}
 	
 	private static CellStyle applyBoldStyle(CellStyle cs, Workbook wb) {
